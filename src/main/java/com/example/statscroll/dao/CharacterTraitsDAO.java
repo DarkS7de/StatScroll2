@@ -9,6 +9,24 @@ import java.util.List;
 public class CharacterTraitsDAO {
     private final String url = "jdbc:h2:./data/statScrollDB";
 
+    public CharacterTraitsDAO() {
+        try (Connection conn = DriverManager.getConnection(url, "sa", "");
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute("""
+                CREATE TABLE IF NOT EXISTS character_traits (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    character_id INT,
+                    type VARCHAR(100),
+                    value VARCHAR(100)
+                )
+            """);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<CharacterTraits> getAll() {
         List<CharacterTraits> traits = new ArrayList<>();
         String sql = "SELECT * FROM character_traits";

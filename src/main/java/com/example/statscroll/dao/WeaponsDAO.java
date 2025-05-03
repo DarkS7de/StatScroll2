@@ -9,6 +9,22 @@ import java.util.List;
 public class WeaponsDAO {
     private final String url = "jdbc:h2:./data/statScrollDB";
 
+    public WeaponsDAO() {
+        try(Connection conn = DriverManager.getConnection(url, "sa", "");
+            Statement stmt = conn.createStatement()){
+            stmt.execute("""
+                CREATE TABLE IF NOT EXISTS weapons (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    weaponName VARCHAR(50),
+                    damage VARCHAR(50),
+                    weaponType VARCHAR(50)
+                )
+            """);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     public List<Weapons> getAll() {
         List<Weapons> weaponsList = new ArrayList<>();
         String sql = "SELECT * FROM weapons";
@@ -50,7 +66,7 @@ public class WeaponsDAO {
     }
 
     public void save(Weapons weapon) {
-        String sql = "INSERT INTO weapons (id, name, damage, type) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO weapons (id, weaponName, damage, weaponType) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -64,7 +80,7 @@ public class WeaponsDAO {
     }
 
     public void update(Weapons weapon) {
-        String sql = "UPDATE weapons SET name = ?, damage = ?, type = ? WHERE id = ?";
+        String sql = "UPDATE weapons SET weaponName = ?, damage = ?, weaponType = ? WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -97,9 +113,9 @@ public class WeaponsDAO {
     private Weapons mapResultSetToWeapon(ResultSet rs) throws SQLException {
         return new Weapons(
                 rs.getInt("id"),
-                rs.getString("name"),
+                rs.getString("weaponName"),
                 rs.getString("damage"),
-                rs.getString("type")
+                rs.getString("weaponType")
         );
     }
 

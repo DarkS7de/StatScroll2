@@ -9,6 +9,21 @@ import java.util.List;
 public class ProficienciesDAO {
     private final String url = "jdbc:h2:./data/statScrollDB";
 
+    public ProficienciesDAO() {
+        try(Connection conn = DriverManager.getConnection(url, "sa", "");
+            Statement stmt = conn.createStatement()){
+            stmt.execute("""
+                CREATE TABLE IF NOT EXISTS proficiencies (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(50),
+                    type VARCHAR(50)
+                )
+            """);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     public List<Proficiencies> getAll() {
         List<Proficiencies> list = new ArrayList<>();
         String sql = "SELECT * FROM proficiencies";

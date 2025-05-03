@@ -9,6 +9,23 @@ import java.util.List;
 public class CharacterWeaponsDAO {
     private final String url = "jdbc:h2:./data/statScrollDB";
 
+    public CharacterWeaponsDAO() {
+        try (Connection conn = DriverManager.getConnection(url, "sa", "");
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute("""
+                CREATE TABLE IF NOT EXISTS character_weapons (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    character_id INT,
+                    weapon_id INT
+                )
+            """);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<CharacterWeapons> getAll() {
         List<CharacterWeapons> weapons = new ArrayList<>();
         String sql = "SELECT * FROM character_weapons";

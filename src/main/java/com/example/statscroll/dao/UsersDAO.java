@@ -13,7 +13,7 @@ public class UsersDAO {
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
         Statement stmt = conn.createStatement()){
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS users (
+                CREATE TABLE IF NOT EXISTS USERS (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     username VARCHAR(50),
                     password VARCHAR(50),
@@ -27,7 +27,7 @@ public class UsersDAO {
     }
 
     public void save(Users user) {
-        String sql = "INSERT INTO users (username, password, email, created_at) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO USERS (username, password, email, created_at) VALUES (?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
@@ -42,7 +42,7 @@ public class UsersDAO {
 
     public List<Users> findAll() {
         List<Users> list = new ArrayList<>();
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM USERS";
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {

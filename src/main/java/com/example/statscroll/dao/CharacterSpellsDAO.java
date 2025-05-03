@@ -9,6 +9,24 @@ import java.util.List;
 public class CharacterSpellsDAO {
     private final String url = "jdbc:h2:./data/statScrollDB";
 
+    public CharacterSpellsDAO() {
+        try (Connection conn = DriverManager.getConnection(url, "sa", "");
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute("""
+                CREATE TABLE IF NOT EXISTS character_feats (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    character_id INT,
+                    spell_id INT,
+                    prepared BOOLEAN
+                )
+            """);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<CharacterSpells> getAll() {
         List<CharacterSpells> spells = new ArrayList<>();
         String sql = "SELECT * FROM character_spells";
@@ -108,5 +126,23 @@ public class CharacterSpellsDAO {
                 rs.getInt("spell_id"),
                 rs.getBoolean("prepared")
         );
+    }
+
+    private List<CharacterSpells> getAllByCharacter(int character_id) {
+        List<CharacterSpells> spells = new ArrayList<>();
+        String sql = "SELECT * FROM character_spells WHERE character_id = ?";
+        try(Connection conn = DriverManager.getConnection(url, "sa", "");
+            PreparedStatement ps = conn.prepareStatement(sql);
+        ){
+            ps.setInt(1, character_id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                spells.add(mapResultSetToCharacterSpells(rs));
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return spells;
     }
 }
