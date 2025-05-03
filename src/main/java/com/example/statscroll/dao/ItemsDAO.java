@@ -9,6 +9,24 @@ import java.util.List;
 public class ItemsDAO {
     private final String url = "jdbc:h2:./data/statScrollDB";
 
+    public ItemsDAO() {
+        try(Connection conn = DriverManager.getConnection(url, "sa", "");
+            Statement stmt = conn.createStatement()){
+            stmt.execute("""
+                CREATE TABLE IF NOT EXISTS items (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(50),
+                    type1 VARCHAR(50),
+                    type2 VARCHAR(50),
+                    weight INT,
+                    price INT
+                )
+            """);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     public List<Items> getAll() {
         List<Items> itemsList = new ArrayList<>();
         String sql = "SELECT * FROM items";
