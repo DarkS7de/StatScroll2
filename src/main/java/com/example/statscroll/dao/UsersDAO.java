@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersDAO {
-    private final String url = "jdbc:h2:./testdb";
+    private final String url = "jdbc:h2:./statScrolldb";
 
     public UsersDAO() {
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
