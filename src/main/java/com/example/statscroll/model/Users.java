@@ -18,6 +18,10 @@ public class Users {
         this.created_at = created_at;
     }
 
+    public Users() {
+
+    }
+
     public int getId() {
         return id;
     }

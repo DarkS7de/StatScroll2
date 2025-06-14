@@ -62,4 +62,17 @@ public class UsersDAO {
         }
         return list;
     }
+    public boolean login(String username, String password) {
+        String sql = "SELECT * FROM USERS WHERE username = ? AND password = ?";
+        try (Connection conn = DriverManager.getConnection(url, "sa", "");
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
