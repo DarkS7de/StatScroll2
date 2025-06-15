@@ -45,11 +45,12 @@ public class RegisterController {
         }
 
         try {
-            Users user = new Users(username, password, email, new Date());
+            Date now = new Date();
+            Users user = new Users(username, password, email, now);
             usersDAO.save(user);
 
             // Vai alla login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/statscroll/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));

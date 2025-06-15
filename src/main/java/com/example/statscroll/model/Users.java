@@ -19,7 +19,10 @@ public class Users {
     }
 
     public Users(String username, String password, String email, Date date) {
-
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.created_at = date;
     }
 
     public int getId() {
