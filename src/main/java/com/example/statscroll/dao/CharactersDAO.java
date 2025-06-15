@@ -168,6 +168,65 @@ public class CharactersDAO {
         return characters;
     }
 
+    public List<Characters> findByUserId(String user_id) {
+        List<Characters> characters = new ArrayList<>();
+        String sql = "SELECT * FROM characters WHERE user_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, "sa", "");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, user_id);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Characters c = new Characters(
+                        rs.getInt("id"),
+                        rs.getString("user_id"),
+                        rs.getString("name"),
+                        rs.getString("char_class"),
+                        rs.getString("subclass"),
+                        rs.getString("multiclass"),
+                        rs.getInt("level"),
+                        rs.getString("race"),
+                        rs.getString("background"),
+                        rs.getString("alignment"),
+                        rs.getInt("initiative"),
+                        rs.getInt("speed"),
+                        rs.getInt("exp"),
+                        rs.getInt("str"),
+                        rs.getInt("dex"),
+                        rs.getInt("con"),
+                        rs.getInt("intel"),
+                        rs.getInt("wis"),
+                        rs.getInt("cha"),
+                        rs.getBoolean("inspiration"),
+                        rs.getInt("profbonus"),
+                        rs.getInt("maxhp"),
+                        rs.getInt("currenthp"),
+                        rs.getInt("temphp"),
+                        rs.getString("totalhitdice"),
+                        rs.getString("hitdice"),
+                        rs.getInt("spellsavedc"),
+                        rs.getInt("spellattackbonus"),
+                        rs.getString("age"),
+                        rs.getString("eyes"),
+                        rs.getString("hair"),
+                        rs.getString("skin"),
+                        rs.getString("height"),
+                        rs.getString("weight"),
+                        rs.getString("portrait_url")
+                );
+                characters.add(c);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return characters;
+    }
+
+
     public Characters findById(int id) {
         String sql = "SELECT * FROM characters WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(url, "sa", "");

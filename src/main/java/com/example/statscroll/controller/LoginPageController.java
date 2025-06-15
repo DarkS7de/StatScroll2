@@ -22,13 +22,18 @@ public class LoginPageController {
     private final UsersDAO usersDAO = new UsersDAO();
 
     @FXML
-    private void onLogin(ActionEvent event) {
+    private void onLogin(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
         if (usersDAO.login(username, password)) {
+            Session.setUserId(username);
             errorLabel.setText("Login riuscito!");
-            // TODO: Vai alla schermata principale
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
         } else {
             errorLabel.setText("Credenziali non valide.");
         }

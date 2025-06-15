@@ -63,6 +63,43 @@ public class Characters {
         this.portrait_url = portrait_url;
     }
 
+    public Characters(String user_id, String name, String char_class, String subclass, String multiclass, int level, String race, String background, String alignment, int initiative, int speed, int exp, int str, int dex, int con, int intel, int wis, int cha, boolean inspiration, int profbonus, int maxhp, int currenthp, int temphp, String totalhitdice, String hitdice, int spellsavedc, int spellattackbonus, String age, String eyes, String hair, String skin, String height, String weight, String portrait_url) {
+        this.user_id = user_id;
+        this.name = name;
+        this.char_class = char_class;
+        this.subclass = subclass;
+        this.multiclass = multiclass;
+        this.level = level;
+        this.race = race;
+        this.background = background;
+        this.alignment = alignment;
+        this.initiative = initiative;
+        this.speed = speed;
+        this.exp = exp;
+        this.str = str;
+        this.dex = dex;
+        this.con = con;
+        this.intel = intel;
+        this.wis = wis;
+        this.cha = cha;
+        this.inspiration = inspiration;
+        this.profbonus = profbonus;
+        this.maxhp = maxhp;
+        this.currenthp = currenthp;
+        this.temphp = temphp;
+        this.totalhitdice = totalhitdice;
+        this.hitdice = hitdice;
+        this.spellsavedc = spellsavedc;
+        this.spellattackbonus = spellattackbonus;
+        this.age = age;
+        this.eyes = eyes;
+        this.hair = hair;
+        this.skin = skin;
+        this.height = height;
+        this.weight = weight;
+        this.portrait_url = portrait_url;
+    }
+
     public int getId() {
         return id;
     }

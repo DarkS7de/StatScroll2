@@ -1,90 +1,107 @@
 package com.example.statscroll.controller;
 
+import com.example.statscroll.dao.CharactersDAO;
+import com.example.statscroll.model.Characters;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 public class MyCharactersController implements Initializable {
 
-    @FXML
-    private ListView<String> charactersListVIew;
+    @FXML public Button backButton;
+    @FXML private ListView<String> charactersListVIew;
+    @FXML private Button deleteButton;
 
     private ObservableList<String> characterList = FXCollections.observableArrayList();
 
     // Mappa nome → ID per sapere chi eliminare
     private Map<String, Integer> nameToIdMap = new HashMap<>();
 
-    // Credenziali DB (modifica con le tue)
-    private final String url = "jdbc:mysql://localhost:3306/tuo_database";
-    private final String user = "tuo_utente";
-    private final String password = "tua_password";
+    CharactersDAO charactersDAO = new CharactersDAO();
 
-    @Override
+    @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println(Session.getUserId());
         loadCharactersFromDatabase();
-
-        // Elimina con doppio click sul personaggio
         charactersListVIew.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                handleDeleteSelectedCharacter();
+            if (event.getClickCount() == 2) { // doppio click
+                String selectedName = charactersListVIew.getSelectionModel().getSelectedItem();
+                if (selectedName != null) {
+                    Integer characterId = nameToIdMap.get(selectedName);
+                    Characters character = charactersDAO.findById(characterId);
+                    Session.setCharacters(character);
+                    try {
+                        openCharacterDetailPage();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
         });
+    }
+
+    private void openCharacterDetailPage() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/characterSheet.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) charactersListVIew.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     private void loadCharactersFromDatabase() {
         characterList.clear();
         nameToIdMap.clear();
 
-        String query = "SELECT id, nome_personaggio FROM personaggi";
+        List<Characters> myCharacters = charactersDAO.findByUserId(Session.getUserId());
 
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+        for(Characters character : myCharacters) {
+            System.out.println(character);
+            nameToIdMap.put(character.getName(), character.getId());
+            characterList.add(character.getName());
+        }
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String nome = rs.getString("nome_personaggio");
+        charactersListVIew.setItems(characterList);
+    }
 
-                characterList.add(nome);
-                nameToIdMap.put(nome, id);
+
+    public void handleBack(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) charactersListVIew.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    @FXML
+    public void handleDelete(ActionEvent actionEvent) {
+        String selectedName = charactersListVIew.getSelectionModel().getSelectedItem();
+        if (selectedName != null) {
+            Integer characterId = nameToIdMap.get(selectedName);
+
+            // Conferma opzionale
+            boolean confirm = true; // Puoi usare un Alert di conferma se vuoi
+
+            if (confirm && characterId != null) {
+                charactersDAO.deleteById(characterId); // Chiama il DAO per cancellare
+                loadCharactersFromDatabase(); // Ricarica la lista aggiornata
             }
-
-            charactersListVIew.setItems(characterList);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    private void handleDeleteSelectedCharacter() {
-        String selected = charactersListVIew.getSelectionModel().getSelectedItem();
-
-        if (selected == null) return;
-
-        Integer id = nameToIdMap.get(selected);
-        if (id == null) return;
-
-        String deleteQuery = "DELETE FROM personaggi WHERE id = ?";
-
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement pstmt = conn.prepareStatement(deleteQuery)) {
-
-            pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-
-            loadCharactersFromDatabase(); // Ricarica la lista aggiornata
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

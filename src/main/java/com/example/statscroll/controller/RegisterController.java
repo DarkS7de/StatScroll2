@@ -25,8 +25,6 @@ public class RegisterController {
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label errorLabel;
 
-    private final String DB_URL = "jdbc:h2:~/test"; // oppure jdbc:h2:mem:test per in-memory
-
     @FXML
     private void onRegister(ActionEvent event) {
         String email = emailField.getText();
