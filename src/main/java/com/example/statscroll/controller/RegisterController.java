@@ -1,53 +1,62 @@
 package com.example.statscroll.controller;
 
-import com.example.statscroll.dao.UsersDAO;
-import com.example.statscroll.model.Users;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import com.example.statscroll.dao.UsersDAO;
+import com.example.statscroll.model.Users;
 import java.util.Date;
+import java.io.IOException;
+import java.sql.*;
+
 
 public class RegisterController {
+    private final UsersDAO usersDAO = new UsersDAO();
 
+    @FXML private TextField emailField;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
-    @FXML private TextField emailField;
-    @FXML private Label messageLabel;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private Label errorLabel;
 
-    private final UsersDAO usersDAO = new UsersDAO();
+    private final String DB_URL = "jdbc:h2:~/test"; // oppure jdbc:h2:mem:test per in-memory
 
     @FXML
     private void onRegister(ActionEvent event) {
+        String email = emailField.getText();
         String username = usernameField.getText();
         String password = passwordField.getText();
-        String email = emailField.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
-        if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
-            messageLabel.setText("Compila tutti i campi.");
+        if (!password.equals(confirmPassword)) {
+            errorLabel.setText("Le password non coincidono.");
             return;
         }
 
-        Users user = new Users();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setCreated_at(new Date());
+        if (email.isEmpty() || username.isEmpty() || password.isEmpty()) {
+            errorLabel.setText("Compila tutti i campi.");
+            return;
+        }
 
-        usersDAO.save(user);
-        messageLabel.setText("Registrazione completata.");
-
-        // Torna al login
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+            Users user = new Users(username, password, email, new Date());
+            usersDAO.save(user);
+
+            // Vai alla login
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/statscroll/login.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) usernameField.getScene().getWindow();
+            Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.show();
+
         } catch (Exception e) {
+            errorLabel.setText("Errore durante la registrazione.");
             e.printStackTrace();
         }
     }

@@ -18,7 +18,7 @@ public class Users {
         this.created_at = created_at;
     }
 
-    public Users() {
+    public Users(String username, String password, String email, Date date) {
 
     }
 
