@@ -79,7 +79,6 @@ public class MyCharactersController implements Initializable {
         charactersListVIew.setItems(characterList);
     }
 
-
     public void handleBack(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
         Parent root = loader.load();
@@ -94,12 +93,11 @@ public class MyCharactersController implements Initializable {
         if (selectedName != null) {
             Integer characterId = nameToIdMap.get(selectedName);
 
-            // Conferma opzionale
-            boolean confirm = true; // Puoi usare un Alert di conferma se vuoi
+            boolean confirm = true;
 
             if (confirm && characterId != null) {
-                charactersDAO.deleteById(characterId); // Chiama il DAO per cancellare
-                loadCharactersFromDatabase(); // Ricarica la lista aggiornata
+                charactersDAO.deleteById(characterId);
+                loadCharactersFromDatabase();
             }
         }
     }

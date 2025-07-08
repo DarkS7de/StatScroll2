@@ -42,23 +42,22 @@
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.CharacterCreationController">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" styleClass="root" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
          <children>
             <TextField fx:id="multiclassField" layoutX="210.0" layoutY="14.0" prefHeight="25.0" prefWidth="87.0" promptText="Multiclasse" />
-            <TextField fx:id="nameField" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="87.0" promptText="Nome" />
+            <TextField fx:id="nameField" layoutX="14.0" layoutY="15.0" prefHeight="25.0" prefWidth="87.0" promptText="Nome" />
             <TextField fx:id="classField" layoutX="111.0" layoutY="14.0" prefHeight="25.0" prefWidth="87.0" promptText="Classe" />
-            <TextField fx:id="subclassField" layoutX="111.0" layoutY="47.0" prefHeight="25.0" prefWidth="87.0" promptText="Sottoclasse" />
+            <TextField fx:id="subclassField" layoutX="111.0" layoutY="67.0" prefHeight="25.0" prefWidth="87.0" promptText="Sottoclasse" />
             <Label layoutX="414.0" layoutY="18.0" text="Livello" />
             <TextField fx:id="raceField" layoutX="304.0" layoutY="14.0" prefHeight="25.0" prefWidth="87.0" promptText="Razza" />
-            <TextField fx:id="alignmentField" layoutX="210.0" layoutY="47.0" prefHeight="25.0" prefWidth="87.0" promptText="Allineamento" />
-            <TextField fx:id="backgroundField" layoutX="304.0" layoutY="47.0" prefHeight="25.0" prefWidth="87.0" promptText="Background" />
-            <Line endX="100.0" layoutX="320.0" layoutY="96.0" startX="-100.0" />
+            <TextField fx:id="alignmentField" layoutX="210.0" layoutY="67.0" prefHeight="25.0" prefWidth="87.0" promptText="Allineamento" />
+            <TextField fx:id="backgroundField" layoutX="304.0" layoutY="67.0" prefHeight="25.0" prefWidth="87.0" promptText="Background" />
             <Spinner fx:id="strSpinner" layoutX="14.0" layoutY="116.0" prefHeight="25.0" prefWidth="58.0" />
             <Spinner fx:id="dexSpinner" layoutX="14.0" layoutY="150.0" prefHeight="25.0" prefWidth="58.0" />
             <Spinner fx:id="conSpinner" layoutX="14.0" layoutY="188.0" prefHeight="25.0" prefWidth="58.0" />
             <Spinner fx:id="intSpinner" layoutX="14.0" layoutY="221.0" prefHeight="25.0" prefWidth="58.0" />
             <Spinner fx:id="wisSpinner" layoutX="14.0" layoutY="256.0" prefHeight="25.0" prefWidth="58.0" />
-            <Spinner fx:id="chaSpinner" layoutX="14.0" layoutY="292.0" prefHeight="25.0" prefWidth="58.0" />
+            <Spinner fx:id="chaSpinner" layoutX="14.0" layoutY="293.0" prefHeight="38.0" prefWidth="58.0" />
             <Label layoutX="81.0" layoutY="120.0" text="FOR" />
             <Label layoutX="82.0" layoutY="154.0" text="DES" />
             <Label layoutX="81.0" layoutY="192.0" text="COS" />
@@ -74,20 +73,20 @@
             <Spinner fx:id="spellAttackBonusSpinner" layoutX="140.0" layoutY="230.0" prefHeight="25.0" prefWidth="58.0" />
             <Label layoutX="208.0" layoutY="234.0" text="SPELL ATTACK BONUS" />
             <Spinner fx:id="initiativeSpinner" layoutX="362.0" layoutY="116.0" prefHeight="25.0" prefWidth="58.0" />
-            <Label layoutX="430.0" layoutY="120.0" text="INIZIATIVA" />
-            <Spinner fx:id="maxHPSpinner" layoutX="362.0" layoutY="150.0" prefHeight="25.0" prefWidth="58.0" />
-            <Label layoutX="430.0" layoutY="154.0" text="PUNTI VITA MASSIMI" />
-            <TextField fx:id="maxHitDiceField" layoutX="362.0" layoutY="188.0" prefHeight="25.0" prefWidth="103.0" promptText="Dadi Vita Totali" />
-            <Line endX="100.0" layoutX="320.0" layoutY="343.0" startX="-100.0" />
-            <TextField fx:id="ageField" layoutX="14.0" layoutY="361.0" prefHeight="25.0" prefWidth="87.0" promptText="Etá" />
-            <TextField fx:id="eyesField" layoutX="111.0" layoutY="361.0" prefHeight="25.0" prefWidth="87.0" promptText="Occhi" />
-            <TextField fx:id="hairField" layoutX="205.0" layoutY="361.0" prefHeight="25.0" prefWidth="87.0" promptText="Capelli" />
-            <TextField fx:id="skinField" layoutX="304.0" layoutY="361.0" prefHeight="25.0" prefWidth="87.0" promptText="Pelle" />
-            <TextField fx:id="heightField" layoutX="398.0" layoutY="361.0" prefHeight="25.0" prefWidth="87.0" promptText="Altezza" />
-            <TextField fx:id="weightField" layoutX="496.0" layoutY="361.0" prefHeight="25.0" prefWidth="87.0" promptText="Peso" />
-            <Button fx:id="nextButton" layoutX="557.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleNextClick" text="Prossimo" />
+            <Label layoutX="430.0" layoutY="129.0" text="INIZIATIVA" />
+            <Spinner fx:id="maxHPSpinner" layoutX="362.0" layoutY="168.0" prefHeight="25.0" prefWidth="58.0" />
+            <Label layoutX="430.0" layoutY="171.0" text="PUNTI VITA MASSIMI" />
+            <TextField fx:id="maxHitDiceField" layoutX="379.0" layoutY="236.0" prefHeight="25.0" prefWidth="103.0" promptText="Dadi Vita Totali" />
+            <Line endX="100.0" layoutX="320.0" layoutY="333.0" startX="-100.0" />
+            <TextField fx:id="ageField" layoutX="14.0" layoutY="347.0" prefHeight="25.0" prefWidth="87.0" promptText="Etá" />
+            <TextField fx:id="eyesField" layoutX="111.0" layoutY="347.0" prefHeight="25.0" prefWidth="87.0" promptText="Occhi" />
+            <TextField fx:id="hairField" layoutX="210.0" layoutY="347.0" prefHeight="25.0" prefWidth="87.0" promptText="Capelli" />
+            <TextField fx:id="skinField" layoutX="304.0" layoutY="347.0" prefHeight="25.0" prefWidth="87.0" promptText="Pelle" />
+            <TextField fx:id="heightField" layoutX="403.0" layoutY="347.0" prefHeight="25.0" prefWidth="87.0" promptText="Altezza" />
+            <TextField fx:id="weightField" layoutX="499.0" layoutY="347.0" prefHeight="25.0" prefWidth="87.0" promptText="Peso" />
+            <Button fx:id="nextButton" layoutX="539.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleNextClick" prefHeight="38.0" prefWidth="87.0" styleClass="button-signin" stylesheets="@../styles.css" text="Next" />
             <Spinner fx:id="levelSpinner" layoutX="459.0" layoutY="14.0" prefHeight="25.0" prefWidth="58.0" />
-            <Button fx:id="previousButton" layoutX="557.0" layoutY="47.0" mnemonicParsing="false" onAction="#handlePreviousClick" prefHeight="25.0" prefWidth="65.0" text="Indietro" />
+            <Button fx:id="previousButton" layoutX="546.0" layoutY="68.0" mnemonicParsing="false" onAction="#handlePreviousClick" prefHeight="38.0" prefWidth="73.0" styleClass="button-signin" stylesheets="@../styles.css" text="Back" />
          </children>
     </AnchorPane>
   </children>

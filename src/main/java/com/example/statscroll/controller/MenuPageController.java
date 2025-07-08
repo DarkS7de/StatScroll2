@@ -35,7 +35,7 @@ public class MenuPageController {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace(); // puoi sostituire con logger se vuoi
+            e.printStackTrace();
         }
     }
 }

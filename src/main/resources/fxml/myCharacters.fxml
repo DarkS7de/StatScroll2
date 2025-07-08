@@ -39,27 +39,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.MyCharactersController">
+<VBox prefHeight="400.0" prefWidth="640.0" styleClass="root" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.MyCharactersController">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="407.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
       <children>
-        <Label alignment="CENTER" layoutX="155.0" layoutY="177.0" style="&#10;" text="Drag components from Library here…" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
-          <font>
-            <Font size="18.0" />
-          </font>
-        </Label>
-            <ListView fx:id="charactersListVIew" layoutY="64.0" prefHeight="343.0" prefWidth="529.0" />
-            <Label layoutX="178.0" layoutY="14.0" prefHeight="45.0" prefWidth="254.0" text="My Characters">
+            <ListView fx:id="charactersListVIew" layoutX="163.0" layoutY="85.0" prefHeight="297.0" prefWidth="327.0" stylesheets="@../styles.css" />
+            <Label layoutX="176.0" layoutY="14.0" prefHeight="48.0" prefWidth="288.0" text="My Characters">
                <font>
-                  <Font name="Serif Bold Italic" size="40.0" />
+                  <Font name="Oriya MN" size="40.0" />
                </font>
             </Label>
-            <Button fx:id="backButton" layoutX="553.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="32.0" prefWidth="73.0" text="Back">
+            <Button fx:id="backButton" layoutX="553.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="32.0" prefWidth="73.0" styleClass="button-signin" text="Back">
                <font>
                   <Font name="Serif Bold Italic" size="18.0" />
                </font>
             </Button>
-          <Button fx:id="deleteButton" layoutX="562.0" layoutY="330.0" onAction="#handleDelete" text="Elimina" />
+          <Button fx:id="deleteButton" layoutX="553.0" layoutY="292.0" onAction="#handleDelete" prefHeight="38.0" prefWidth="73.0" styleClass="button-signin" text="Delete" />
 
       </children>
     </AnchorPane>

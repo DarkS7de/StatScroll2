@@ -6,41 +6,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.statscroll.controller.MenuPageController">
+<VBox prefHeight="400.0" prefWidth="640.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.MenuPageController">
 
     <children>
         <AnchorPane prefHeight="400.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
             <children>
-                <Label layoutX="105.0" layoutY="14.0" prefHeight="54.0" prefWidth="431.0" text="Welcome To StatScroll">
+                <Label layoutX="59.0" layoutY="30.0" prefHeight="56.0" prefWidth="525.0" text="Welcome To StatScroll">
                     <font>
-                        <Font name="Serif Bold Italic" size="45.0" />
+                        <Font name="Oriya MN" size="45.0" />
                     </font>
                 </Label>
 
-                <Button fx:id="myCharactersButton"
-                        layoutX="214.0" layoutY="127.0" prefHeight="66.0" prefWidth="214.0"
-                        mnemonicParsing="false" text="My Characters"
-                        onAction="#handleMyCharacters">
+                <Button fx:id="myCharactersButton" layoutX="214.0" layoutY="127.0" mnemonicParsing="false" onAction="#handleMyCharacters" prefHeight="66.0" prefWidth="214.0" styleClass="button-signin" stylesheets="@../styles.css" text="My Characters">
                     <font>
                         <Font name="Serif Bold Italic" size="25.0" />
                     </font>
                 </Button>
 
-                <Button fx:id="createCharacterButton"
-                        layoutX="213.0" layoutY="235.0" prefHeight="66.0" prefWidth="214.0"
-                        mnemonicParsing="false" text="Create New Character"
-                        onAction="#handleCreateCharacter">
+                <Button fx:id="createCharacterButton" layoutX="213.0" layoutY="235.0" mnemonicParsing="false" onAction="#handleCreateCharacter" prefHeight="66.0" prefWidth="214.0" styleClass="button-signin" text="Create New Character">
                     <font>
                         <Font name="Serif Bold Italic" size="20.0" />
                     </font>
                 </Button>
 
-                <Button fx:id="backButton"
-                        layoutX="10.0" layoutY="10.0"
-                        mnemonicParsing="false" text="← Back"
-                        onAction="#handleBack" />
+                <Button fx:id="backButton" layoutX="14.0" layoutY="348.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="38.0" prefWidth="88.0" styleClass="button-signin" text="Back" />
             </children>
         </AnchorPane>
     </children>

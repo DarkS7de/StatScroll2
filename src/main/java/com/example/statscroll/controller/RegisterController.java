@@ -1,5 +1,7 @@
 package com.example.statscroll.controller;
 
+import com.example.statscroll.util.ErrorHandler;
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +13,10 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import com.example.statscroll.dao.UsersDAO;
 import com.example.statscroll.model.Users;
+import javafx.util.Duration;
+
 import java.util.Date;
 import java.io.IOException;
-import java.sql.*;
-
 
 public class RegisterController {
     private final UsersDAO usersDAO = new UsersDAO();
@@ -27,35 +29,60 @@ public class RegisterController {
 
     @FXML
     private void onRegister(ActionEvent event) {
-        String email = emailField.getText();
-        String username = usernameField.getText();
+        // Resetta eventuali errori precedenti
+        ErrorHandler.resetErrorLabel(errorLabel);
+
+        String email = emailField.getText().trim();
+        String username = usernameField.getText().trim();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        if (!password.equals(confirmPassword)) {
-            errorLabel.setText("Le password non coincidono.");
+        // Validazione input
+        if (email.isEmpty() || username.isEmpty() || password.isEmpty()) {
+            ErrorHandler.showError(errorLabel, "Compila tutti i campi.");
             return;
         }
 
-        if (email.isEmpty() || username.isEmpty() || password.isEmpty()) {
-            errorLabel.setText("Compila tutti i campi.");
+        if (!password.equals(confirmPassword)) {
+            ErrorHandler.showError(errorLabel, "Le password non coincidono.");
             return;
         }
 
         try {
-            Date now = new Date();
-            Users user = new Users(username, password, email, now);
+            if (usersDAO.usernameExists(username)) {
+                ErrorHandler.showError(errorLabel, "Nome utente già in uso.");
+                return;
+            }
+
+            if (usersDAO.emailExists(email)) {
+                ErrorHandler.showError(errorLabel, "Email già registrata.");
+                return;
+            }
+
+            Users user = new Users(username, password, email, new Date());
             usersDAO.save(user);
 
-            // Vai alla login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) emailField.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            ErrorHandler.showSuccess(errorLabel, "Registrazione completata con successo!");
+
+            // Reindirizzamento alla pagina di login dopo 1 secondo
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(e -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = (Stage) emailField.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                } catch (IOException ex) {
+                    ErrorHandler.showErrorDialog("Errore", "Errore di navigazione",
+                            "Impossibile caricare la pagina di login.");
+                }
+            });
+            pause.play();
 
         } catch (Exception e) {
-            errorLabel.setText("Errore durante la registrazione.");
+            ErrorHandler.showErrorDialog("Errore Grave", "Errore durante la registrazione",
+                    "Si è verificato un errore imprevisto. Riprovare più tardi.");
             e.printStackTrace();
         }
     }

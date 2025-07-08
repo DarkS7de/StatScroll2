@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -7,26 +8,31 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 <VBox id=" " prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.LoginPageController">
   <children>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="298.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="298.0" prefWidth="640.0" styleClass="root" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
       <children>
-            <Label fx:id="titleLabel" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="14.0" layoutY="14.0" prefHeight="33.0" prefWidth="298.0" text="StatScroll" textOverrun="CENTER_ELLIPSIS">
+            <Label fx:id="titleLabel" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="147.0" layoutY="34.0" prefHeight="86.0" prefWidth="348.0" stylesheets="@../styles.css" text="StatScroll" textOverrun="CENTER_ELLIPSIS">
                <font>
-                  <Font name="Serif Bold Italic" size="70.0" />
+                  <Font name="Oriya MN" size="70.0" />
                </font>
             </Label>
-            <Button layoutX="105.0" layoutY="274.0" mnemonicParsing="false" onAction="#onLogin" prefHeight="38.0" prefWidth="101.0" styleClass="fancy-button" text="Login">
+            <Button layoutX="270.0" layoutY="272.0" mnemonicParsing="false" onAction="#onLogin" prefHeight="38.0" prefWidth="101.0" styleClass="button-signin" stylesheets="@../styles.css" text="Log in">
                <opaqueInsets>
                   <Insets />
-               </opaqueInsets></Button>
-            <TextField fx:id="usernameField" layoutX="76.0" layoutY="152.0" prefHeight="25.0" prefWidth="160.0" promptText="username" />
-            <Button layoutX="108.0" layoutY="342.0" mnemonicParsing="false" onAction="#onRegister" prefHeight="33.0" prefWidth="95.0" styleClass="fancy-button" stylesheets="@../../../../../../styleLogin.css" text="Register" />
-            <Line endX="-75.5" endY="-183.2071075439453" layoutX="396.0" layoutY="181.0" startX="-75.5" startY="236.0" />
-            <PasswordField fx:id="passwordField" layoutX="76.0" layoutY="207.0" prefHeight="26.0" prefWidth="160.0" promptText="password" />
+               </opaqueInsets>
+               <font>
+                  <Font name="Savoye LET Plain:1.0" size="13.0" />
+               </font></Button>
+            <TextField fx:id="usernameField" layoutX="240.0" layoutY="146.0" prefHeight="25.0" prefWidth="160.0" promptText="username" />
+            <Button layoutX="273.0" layoutY="333.0" mnemonicParsing="false" onAction="#onRegister" prefHeight="33.0" prefWidth="95.0" styleClass="button-signin" text="Register">
+               <stylesheets>
+                  <URL value="@../../../../../styleLogin.css" />
+                  <URL value="@../styles.css" />
+               </stylesheets></Button>
+            <PasswordField fx:id="passwordField" layoutX="240.0" layoutY="200.0" prefHeight="26.0" prefWidth="160.0" promptText="password" />
             <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="77.0" layoutY="120.0" prefHeight="17.0" prefWidth="160.0" textFill="RED" />
       </children>
     </AnchorPane>

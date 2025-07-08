@@ -1,0 +1,102 @@
+/*root*/
+.root {
+    -fx-font-family: "Oriya MN";
+    -fx-background-color: linear-gradient(to bottom right, #8e9eab, #eef2f3, #d9a7c7, #fffcdc);
+    -fx-background-insets: 0;
+}
+
+/*pannello principale*/
+#loginPane {
+    -fx-background-color: rgba(255, 255, 255, 0.85);
+    -fx-background-radius: 20;
+    -fx-padding: 40;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 25, 0.3, 0, 10);
+    -fx-border-radius: 20;
+}
+
+/*titolo*/
+.label-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #6a11cb, #2575fc);
+}
+
+/* textfield */
+.text-field, .password-field {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: linear-gradient(to right, #c471f5, #fa71cd);
+    -fx-border-width: 1.5;
+    -fx-padding: 10 14;
+    -fx-font-size: 14px;
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* focus effetto */
+.text-field:focused, .password-field:focused {
+    -fx-border-color: linear-gradient(to right, #89f7fe, #66a6ff);
+    -fx-effect: dropshadow(gaussian, rgba(100, 100, 255, 0.3), 8, 0.4, 0, 2);
+}
+
+/* Bottone principale */
+.button-signin {
+    -fx-background-color: linear-gradient(to right, #5b77ec, #8e54e9);
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 10 0;
+    -fx-effect: dropshadow(gaussian, rgba(91, 119, 236, 0.3), 10, 0.4, 0, 4);
+}
+
+.button-signin:hover {
+    -fx-background-color: linear-gradient(to right, #667eea, #764ba2);
+}
+
+/* listview con sfondo sfumato */
+.list-view {
+    -fx-font-family: "Oriya MN";
+    -fx-font-size: 14px;
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: transparent;
+    -fx-padding: 5;
+}
+
+/* Celle della lista */
+.list-cell {
+    -fx-padding: 10;
+    -fx-text-fill: #393737;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-style: solid;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hover su una cella */
+.list-cell:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Cella selezionata */
+.list-cell:selected {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: #393737;
+    -fx-font-weight: bold;
+}
+
+/* Focus su ListView */
+.list-view:focused {
+    -fx-border-color: #c471f5;
+}
+
+.list-view .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    -fx-background-radius: 4;
+}
+
+.list-view .track {
+    -fx-background-color: transparent;
+}
