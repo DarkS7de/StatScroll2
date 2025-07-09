@@ -4,56 +4,160 @@ import com.example.statscroll.dao.CharactersDAO;
 import com.example.statscroll.model.Characters;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MyCharactersController implements Initializable {
 
     @FXML public Button backButton;
     @FXML private ListView<String> charactersListVIew;
     @FXML private Button deleteButton;
+    @FXML private ComboBox<String> classFilterComboBox;
+    @FXML private TextField searchField;
+    @FXML private Button resetFilterButton;
 
     private ObservableList<String> characterList = FXCollections.observableArrayList();
-
-    // Mappa nome → ID per sapere chi eliminare
+    private FilteredList<String> filteredCharacters;
     private Map<String, Integer> nameToIdMap = new HashMap<>();
+    private Map<String, String> nameToClassMap = new HashMap<>();
 
-    CharactersDAO charactersDAO = new CharactersDAO();
+    private final List<String> dndClasses = List.of(
+            "Tutte le classi", "Guerriero", "Mago", "Ladro",
+            "Chierico", "Paladino", "Druido"
+    );
 
-    @FXML
+    private CharactersDAO charactersDAO = new CharactersDAO();
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println(Session.getUserId());
+        setupClassFilter();
+        setupSearchFilter();
         loadCharactersFromDatabase();
+        setupDoubleClickHandler();
+    }
+
+    private void setupClassFilter() {
+        classFilterComboBox.setItems(FXCollections.observableArrayList(dndClasses));
+        classFilterComboBox.getSelectionModel().selectFirst();
+
+        classFilterComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            updateFilter();
+        });
+    }
+
+    private void setupSearchFilter() {
+        filteredCharacters = new FilteredList<>(characterList, p -> true);
+        charactersListVIew.setItems(filteredCharacters);
+
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            updateFilter();
+        });
+    }
+
+    private void setupDoubleClickHandler() {
         charactersListVIew.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // doppio click
-                String selectedName = charactersListVIew.getSelectionModel().getSelectedItem();
-                if (selectedName != null) {
-                    Integer characterId = nameToIdMap.get(selectedName);
-                    Characters character = charactersDAO.findById(characterId);
-                    Session.setCharacters(character);
-                    try {
-                        openCharacterDetailPage();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+            if (event.getClickCount() == 2) {
+                handleCharacterSelection();
             }
         });
+    }
+
+    private void handleCharacterSelection() {
+        String selectedName = charactersListVIew.getSelectionModel().getSelectedItem();
+        if (selectedName != null) {
+            Integer characterId = nameToIdMap.get(selectedName);
+            Characters character = charactersDAO.findById(characterId);
+            Session.setCharacters(character);
+            try {
+                openCharacterDetailPage();
+            } catch (IOException e) {
+                e.printStackTrace();
+                showErrorAlert("Errore", "Impossibile aprire i dettagli del personaggio");
+            }
+        }
+    }
+
+    private void updateFilter() {
+        String selectedClass = classFilterComboBox.getValue();
+        String searchText = searchField.getText().toLowerCase();
+
+        filteredCharacters.setPredicate(character -> {
+            // Filtro per classe
+            boolean classMatches = selectedClass == null ||
+                    selectedClass.equals("Tutte le classi") ||
+                    selectedClass.equals(nameToClassMap.get(character));
+
+            // Filtro per ricerca testo
+            boolean nameMatches = searchText.isEmpty() ||
+                    character.toLowerCase().contains(searchText);
+
+            return classMatches && nameMatches;
+        });
+    }
+
+    private void loadCharactersFromDatabase() {
+        characterList.clear();
+        nameToIdMap.clear();
+        nameToClassMap.clear();
+
+        List<Characters> myCharacters = charactersDAO.findByUserId(Session.getUserId());
+
+        for(Characters character : myCharacters) {
+            nameToIdMap.put(character.getName(), character.getId());
+            nameToClassMap.put(character.getName(), character.getChar_class());
+            characterList.add(character.getName());
+        }
+
+        updateFilter();
+    }
+
+    @FXML
+    private void handleDelete(ActionEvent actionEvent) {
+        String selectedName = charactersListVIew.getSelectionModel().getSelectedItem();
+        if (selectedName != null) {
+            Integer characterId = nameToIdMap.get(selectedName);
+
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Conferma eliminazione");
+            confirmation.setHeaderText("Eliminare il personaggio?");
+            confirmation.setContentText("Sei sicuro di voler eliminare " + selectedName + "?");
+
+            Optional<ButtonType> result = confirmation.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                charactersDAO.deleteById(characterId);
+                loadCharactersFromDatabase();
+                showInfoAlert("Successo", "Personaggio eliminato con successo");
+            }
+        } else {
+            showErrorAlert("Errore", "Nessun personaggio selezionato");
+        }
+    }
+
+    @FXML
+    private void handleResetFilter(ActionEvent actionEvent) {
+        classFilterComboBox.getSelectionModel().selectFirst();
+        searchField.clear();
+    }
+
+    @FXML
+    public void handleBack(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) backButton.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     private void openCharacterDetailPage() throws IOException {
@@ -64,42 +168,19 @@ public class MyCharactersController implements Initializable {
         stage.show();
     }
 
-    private void loadCharactersFromDatabase() {
-        characterList.clear();
-        nameToIdMap.clear();
-
-        List<Characters> myCharacters = charactersDAO.findByUserId(Session.getUserId());
-
-        for(Characters character : myCharacters) {
-            System.out.println(character);
-            nameToIdMap.put(character.getName(), character.getId());
-            characterList.add(character.getName());
-        }
-
-        charactersListVIew.setItems(characterList);
+    private void showErrorAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
-    public void handleBack(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) charactersListVIew.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+    private void showInfoAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
-
-    @FXML
-    public void handleDelete(ActionEvent actionEvent) {
-        String selectedName = charactersListVIew.getSelectionModel().getSelectedItem();
-        if (selectedName != null) {
-            Integer characterId = nameToIdMap.get(selectedName);
-
-            boolean confirm = true;
-
-            if (confirm && characterId != null) {
-                charactersDAO.deleteById(characterId);
-                loadCharactersFromDatabase();
-            }
-        }
-    }
-
 }

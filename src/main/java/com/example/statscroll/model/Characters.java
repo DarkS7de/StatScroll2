@@ -16,16 +16,40 @@ public class Characters {
     private int initiative;
     private int speed;
     private int exp;
-    private int str, dex, con, intel, wis, cha;
+    private int str;
+    private int dex;
+    private int con;
+    private int intel;
+    private int wis;
+    private int cha;
     private boolean inspiration;
     private int profbonus;
-    private int maxhp, currenthp, temphp; //chiedi a fra perchè
-    private String totalhitdice, hitdice;
-    private int spellsavedc, spellattackbonus;
-    private String age, eyes, hair, skin, height, weight; //dire a fra che abbiamo i capelli
+    private int maxhp;
+    private int currenthp;
+    private int temphp;
+    private String totalhitdice;
+    private String hitdice;
+    private int spellsavedc;
+    private int spellattackbonus;
+    private String age;
+    private String eyes;
+    private String hair;
+    private String skin;
+    private String height;
+    private String weight;
     private String portrait_url;
 
-    public Characters(int id, String user_id, String name, String char_class, String subclass, String multiclass, int level, String race, String background, String alignment, int initiative, int speed, int exp, int str, int dex, int con, int intel, int wis, int cha, boolean inspiration, int profbonus, int maxhp, int currenthp, int temphp, String totalhitdice, String hitdice, int spellsavedc, int spellattackbonus, String age, String eyes, String hair, String skin, String height, String weight, String portrait_url) {
+    // Costruttori
+    public Characters() {}
+
+    public Characters(int id, String user_id, String name, String char_class, String subclass,
+                      String multiclass, int level, String race, String background,
+                      String alignment, int initiative, int speed, int exp, int str,
+                      int dex, int con, int intel, int wis, int cha, boolean inspiration,
+                      int profbonus, int maxhp, int currenthp, int temphp, String totalhitdice,
+                      String hitdice, int spellsavedc, int spellattackbonus, String age,
+                      String eyes, String hair, String skin, String height, String weight,
+                      String portrait_url) {
         this.id = id;
         this.user_id = user_id;
         this.name = name;
@@ -63,373 +87,139 @@ public class Characters {
         this.portrait_url = portrait_url;
     }
 
-    public Characters(String user_id, String name, String char_class, String subclass, String multiclass, int level, String race, String background, String alignment, int initiative, int speed, int exp, int str, int dex, int con, int intel, int wis, int cha, boolean inspiration, int profbonus, int maxhp, int currenthp, int temphp, String totalhitdice, String hitdice, int spellsavedc, int spellattackbonus, String age, String eyes, String hair, String skin, String height, String weight, String portrait_url) {
-        this.user_id = user_id;
-        this.name = name;
-        this.char_class = char_class;
-        this.subclass = subclass;
-        this.multiclass = multiclass;
-        this.level = level;
-        this.race = race;
-        this.background = background;
-        this.alignment = alignment;
-        this.initiative = initiative;
-        this.speed = speed;
-        this.exp = exp;
-        this.str = str;
-        this.dex = dex;
-        this.con = con;
-        this.intel = intel;
-        this.wis = wis;
-        this.cha = cha;
-        this.inspiration = inspiration;
-        this.profbonus = profbonus;
-        this.maxhp = maxhp;
-        this.currenthp = currenthp;
-        this.temphp = temphp;
-        this.totalhitdice = totalhitdice;
-        this.hitdice = hitdice;
-        this.spellsavedc = spellsavedc;
-        this.spellattackbonus = spellattackbonus;
-        this.age = age;
-        this.eyes = eyes;
-        this.hair = hair;
-        this.skin = skin;
-        this.height = height;
-        this.weight = weight;
-        this.portrait_url = portrait_url;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getChar_class() {
-        return char_class;
-    }
-
-    public String getSubclass() {
-        return subclass;
-    }
-
-    public String getMulticlass() {
-        return multiclass;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public String getRace() {
-        return race;
-    }
-
-    public String getBackground() {
-        return background;
-    }
-
-    public String getAlignment() {
-        return alignment;
-    }
-
-    public int getInitiative() {
-        return initiative;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public int getExp() {
-        return exp;
-    }
-
-    public int getStr() {
-        return str;
-    }
-
-    public int getDex() {
-        return dex;
-    }
-
-    public int getCon() {
-        return con;
-    }
-
-    public int getIntel() {
-        return intel;
-    }
+    // Getter e Setter completi
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public int getWis() {
-        return wis;
-    }
+    public String getUser_id() { return user_id; }
+    public void setUser_id(String user_id) { this.user_id = user_id; }
 
-    public int getCha() {
-        return cha;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public boolean isInspiration() {
-        return inspiration;
-    }
+    public String getChar_class() { return char_class; }
+    public void setChar_class(String char_class) { this.char_class = char_class; }
 
-    public int getProfbonus() {
-        return profbonus;
-    }
+    public String getSubclass() { return subclass; }
+    public void setSubclass(String subclass) { this.subclass = subclass; }
 
-    public int getMaxhp() {
-        return maxhp;
-    }
+    public String getMulticlass() { return multiclass; }
+    public void setMulticlass(String multiclass) { this.multiclass = multiclass; }
 
-    public int getCurrenthp() {
-        return currenthp;
-    }
+    public int getLevel() { return level; }
+    public void setLevel(int level) { this.level = level; }
 
-    public int getTemphp() {
-        return temphp;
-    }
+    public String getRace() { return race; }
+    public void setRace(String race) { this.race = race; }
 
-    public String getTotalhitdice() {
-        return totalhitdice;
-    }
+    public String getBackground() { return background; }
+    public void setBackground(String background) { this.background = background; }
 
-    public String getHitdice() {
-        return hitdice;
-    }
+    public String getAlignment() { return alignment; }
+    public void setAlignment(String alignment) { this.alignment = alignment; }
 
-    public int getSpellsavedc() {
-        return spellsavedc;
-    }
+    public int getInitiative() { return initiative; }
+    public void setInitiative(int initiative) { this.initiative = initiative; }
 
-    public int getSpellattackbonus() {
-        return spellattackbonus;
-    }
+    public int getSpeed() { return speed; }
+    public void setSpeed(int speed) { this.speed = speed; }
 
-    public String getAge() {
-        return age;
-    }
+    public int getExp() { return exp; }
+    public void setExp(int exp) { this.exp = exp; }
 
-    public String getEyes() {
-        return eyes;
-    }
+    public int getStr() { return str; }
+    public void setStr(int str) { this.str = str; }
 
-    public String getHair() {
-        return hair;
-    }
+    public int getDex() { return dex; }
+    public void setDex(int dex) { this.dex = dex; }
 
-    public String getSkin() {
-        return skin;
-    }
+    public int getCon() { return con; }
+    public void setCon(int con) { this.con = con; }
 
-    public String getHeight() {
-        return height;
-    }
+    public int getIntel() { return intel; }
+    public void setIntel(int intel) { this.intel = intel; }
 
-    public String getWeight() {
-        return weight;
-    }
+    public int getWis() { return wis; }
+    public void setWis(int wis) { this.wis = wis; }
 
-    public String getPortrait_url() {
-        return portrait_url;
-    }
+    public int getCha() { return cha; }
+    public void setCha(int cha) { this.cha = cha; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public boolean isInspiration() { return inspiration; }
+    public void setInspiration(boolean inspiration) { this.inspiration = inspiration; }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
+    public int getProfbonus() { return profbonus; }
+    public void setProfbonus(int profbonus) { this.profbonus = profbonus; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public int getMaxhp() { return maxhp; }
+    public void setMaxhp(int maxhp) { this.maxhp = maxhp; }
 
-    public void setChar_class(String char_class) {
-        this.char_class = char_class;
-    }
+    public int getCurrenthp() { return currenthp; }
+    public void setCurrenthp(int currenthp) { this.currenthp = currenthp; }
 
-    public void setSubclass(String subclass) {
-        this.subclass = subclass;
-    }
+    public int getTemphp() { return temphp; }
+    public void setTemphp(int temphp) { this.temphp = temphp; }
 
-    public void setMulticlass(String multiclass) {
-        this.multiclass = multiclass;
-    }
+    public String getTotalhitdice() { return totalhitdice; }
+    public void setTotalhitdice(String totalhitdice) { this.totalhitdice = totalhitdice; }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+    public String getHitdice() { return hitdice; }
+    public void setHitdice(String hitdice) { this.hitdice = hitdice; }
 
-    public void setRace(String race) {
-        this.race = race;
-    }
+    public int getSpellsavedc() { return spellsavedc; }
+    public void setSpellsavedc(int spellsavedc) { this.spellsavedc = spellsavedc; }
 
-    public void setBackground(String background) {
-        this.background = background;
-    }
+    public int getSpellattackbonus() { return spellattackbonus; }
+    public void setSpellattackbonus(int spellattackbonus) { this.spellattackbonus = spellattackbonus; }
 
-    public void setAlignment(String alignment) {
-        this.alignment = alignment;
-    }
+    public String getAge() { return age; }
+    public void setAge(String age) { this.age = age; }
 
-    public void setInitiative(int initiative) {
-        this.initiative = initiative;
-    }
+    public String getEyes() { return eyes; }
+    public void setEyes(String eyes) { this.eyes = eyes; }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
+    public String getHair() { return hair; }
+    public void setHair(String hair) { this.hair = hair; }
 
-    public void setExp(int exp) {
-        this.exp = exp;
-    }
+    public String getSkin() { return skin; }
+    public void setSkin(String skin) { this.skin = skin; }
 
-    public void setStr(int str) {
-        this.str = str;
-    }
+    public String getHeight() { return height; }
+    public void setHeight(String height) { this.height = height; }
 
-    public void setDex(int dex) {
-        this.dex = dex;
-    }
+    public String getWeight() { return weight; }
+    public void setWeight(String weight) { this.weight = weight; }
 
-    public void setCon(int con) {
-        this.con = con;
-    }
+    public String getPortrait_url() { return portrait_url; }
+    public void setPortrait_url(String portrait_url) { this.portrait_url = portrait_url; }
 
-    public void setIntel(int intel) {
-        this.intel = intel;
-    }
-
-    public void setWis(int wis) {
-        this.wis = wis;
-    }
-
-    public void setCha(int cha) {
-        this.cha = cha;
-    }
-
-    public void setInspiration(boolean inspiration) {
-        this.inspiration = inspiration;
-    }
-
-    public void setProfbonus(int profbonus) {
-        this.profbonus = profbonus;
-    }
-
-    public void setMaxhp(int maxhp) {
-        this.maxhp = maxhp;
-    }
-
-    public void setCurrenthp(int currenthp) {
-        this.currenthp = currenthp;
-    }
-
-    public void setTemphp(int temphp) {
-        this.temphp = temphp;
-    }
-
-    public void setTotalhitdice(String totalhitdice) {
-        this.totalhitdice = totalhitdice;
-    }
-
-    public void setHitdice(String hitdice) {
-        this.hitdice = hitdice;
-    }
-
-    public void setSpellsavedc(int spellsavedc) {
-        this.spellsavedc = spellsavedc;
-    }
-
-    public void setSpellattackbonus(int spellattackbonus) {
-        this.spellattackbonus = spellattackbonus;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public void setEyes(String eyes) {
-        this.eyes = eyes;
-    }
-
-    public void setHair(String hair) {
-        this.hair = hair;
-    }
-
-    public void setSkin(String skin) {
-        this.skin = skin;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public void setPortrait_url(String portrait_url) {
-        this.portrait_url = portrait_url;
-    }
-
+    // Metodi sovrascritti
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Characters that = (Characters) o;
-        return id == that.id && level == that.level && initiative == that.initiative && speed == that.speed && exp == that.exp && str == that.str && dex == that.dex && con == that.con && intel == that.intel && wis == that.wis && cha == that.cha && inspiration == that.inspiration && profbonus == that.profbonus && maxhp == that.maxhp && currenthp == that.currenthp && temphp == that.temphp && spellsavedc == that.spellsavedc && spellattackbonus == that.spellattackbonus && Objects.equals(user_id, that.user_id) && Objects.equals(name, that.name) && Objects.equals(char_class, that.char_class) && Objects.equals(subclass, that.subclass) && Objects.equals(multiclass, that.multiclass) && Objects.equals(race, that.race) && Objects.equals(background, that.background) && Objects.equals(alignment, that.alignment) && Objects.equals(totalhitdice, that.totalhitdice) && Objects.equals(hitdice, that.hitdice) && Objects.equals(age, that.age) && Objects.equals(eyes, that.eyes) && Objects.equals(hair, that.hair) && Objects.equals(skin, that.skin) && Objects.equals(height, that.height) && Objects.equals(weight, that.weight) && Objects.equals(portrait_url, that.portrait_url);
+        return id == that.id &&
+                Objects.equals(user_id, that.user_id) &&
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user_id, name, char_class, subclass, multiclass, level, race, background, alignment, initiative, speed, exp, str, dex, con, intel, wis, cha, inspiration, profbonus, maxhp, currenthp, temphp, totalhitdice, hitdice, spellsavedc, spellattackbonus, age, eyes, hair, skin, height, weight, portrait_url);
+        return Objects.hash(id, user_id, name);
     }
 
     @Override
     public String toString() {
-        return "com.example.statscroll.model.Characters{" +
+        return "Character{" +
                 "id=" + id +
-                ", user_id='" + user_id + '\'' +
                 ", name='" + name + '\'' +
-                ", char_class='" + char_class + '\'' +
-                ", subclass='" + subclass + '\'' +
-                ", multiclass='" + multiclass + '\'' +
+                ", class='" + char_class + '\'' +
                 ", level=" + level +
-                ", race='" + race + '\'' +
-                ", background='" + background + '\'' +
-                ", alignment='" + alignment + '\'' +
-                ", initiative=" + initiative +
-                ", speed=" + speed +
-                ", exp=" + exp +
-                ", str=" + str +
-                ", dex=" + dex +
-                ", con=" + con +
-                ", intel=" + intel +
-                ", wis=" + wis +
-                ", cha=" + cha +
-                ", inspiration=" + inspiration +
-                ", profbonus=" + profbonus +
-                ", maxhp=" + maxhp +
-                ", currenthp=" + currenthp +
-                ", temphp=" + temphp +
-                ", totalhitdice='" + totalhitdice + '\'' +
-                ", hitdice='" + hitdice + '\'' +
-                ", spellsavedc=" + spellsavedc +
-                ", spellattackbonus=" + spellattackbonus +
-                ", age='" + age + '\'' +
-                ", eyes='" + eyes + '\'' +
-                ", hair='" + hair + '\'' +
-                ", skin='" + skin + '\'' +
-                ", height='" + height + '\'' +
-                ", weight='" + weight + '\'' +
-                ", portrait_url='" + portrait_url + '\'' +
                 '}';
+    }
+
+    public String toListViewString() {
+        return String.format("%s (Lvl %d %s)", name, level, char_class);
     }
 }

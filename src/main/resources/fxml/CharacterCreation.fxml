@@ -40,6 +40,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.HBox?>
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.CharacterCreationController">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" styleClass="root" stylesheets="@../styles.css" VBox.vgrow="ALWAYS">
@@ -87,6 +89,28 @@
             <Button fx:id="nextButton" layoutX="539.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleNextClick" prefHeight="38.0" prefWidth="87.0" styleClass="button-signin" stylesheets="@../styles.css" text="Next" />
             <Spinner fx:id="levelSpinner" layoutX="459.0" layoutY="14.0" prefHeight="25.0" prefWidth="58.0" />
             <Button fx:id="previousButton" layoutX="546.0" layoutY="68.0" mnemonicParsing="false" onAction="#handlePreviousClick" prefHeight="38.0" prefWidth="73.0" styleClass="button-signin" stylesheets="@../styles.css" text="Back" />
+            <!-- Aggiungi dove appropriato nel tuo CharacterCreation.fxml -->
+            <Spinner fx:id="speedSpinner" promptText="Speed"/>
+            <Spinner fx:id="armorClassSpinner" promptText="Armor Class"/>
+            <HBox>
+               <Label text="Hit Dice:"/>
+               <Spinner fx:id="hitDiceQuantitySpinner"/>
+               <Label text="d"/>
+               <Spinner fx:id="hitDiceTypeSpinner"/>
+            </HBox>
+
+            <HBox>
+               <Label text="Death Saves Success:"/>
+               <CheckBox fx:id="deathSuccess1"/>
+               <CheckBox fx:id="deathSuccess2"/>
+               <CheckBox fx:id="deathSuccess3"/>
+            </HBox>
+            <HBox>
+               <Label text="Death Saves Failures:"/>
+               <CheckBox fx:id="deathFail1"/>
+               <CheckBox fx:id="deathFail2"/>
+               <CheckBox fx:id="deathFail3"/>
+            </HBox>
          </children>
     </AnchorPane>
   </children>

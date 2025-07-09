@@ -28,7 +28,7 @@
                         <Font name="Serif Bold Italic" size="20.0" />
                     </font>
                 </Button>
-
+                <Button text="Dice Roller" onAction="#handleDiceRoller" />
                 <Button fx:id="backButton" layoutX="14.0" layoutY="348.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="38.0" prefWidth="88.0" styleClass="button-signin" text="Back" />
             </children>
         </AnchorPane>

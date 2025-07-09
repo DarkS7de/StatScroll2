@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.statscroll.controller.DiceRollerController"
+      spacing="10" style="-fx-padding: 15;">
+
+    <TabPane>
+        <tabs>
+            <Tab text="Basic Dice">
+                <ScrollPane>
+                    <VBox fx:id="diceButtonsContainer" spacing="10" style="-fx-padding: 10;"/>
+                </ScrollPane>
+            </Tab>
+
+            <Tab text="Custom Roll">
+                <VBox spacing="10" style="-fx-padding: 10;">
+                    <Label text="DnD Notation (e.g., 2d6+3):"/>
+                    <TextField fx:id="customNotationField" promptText="Enter dice notation"/>
+
+                    <Label text="Description:"/>
+                    <TextField fx:id="descriptionField" promptText="Roll description"/>
+
+                    <HBox spacing="10">
+                        <Button text="Roll" onAction="#handleCustomRoll"/>
+                        <Button text="Save Roll" onAction="#handleSaveRoll"/>
+                    </HBox>
+
+                    <Label text="Save as:"/>
+                    <TextField fx:id="saveNameField" promptText="Name for this roll"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="Saved Rolls">
+                <VBox spacing="10" style="-fx-padding: 10;">
+                    <ListView fx:id="savedRollsList"/>
+                    <HBox spacing="10">
+                        <Button text="Roll Selected" onAction="#handleRollSaved"/>
+                        <Button text="Refresh List" onAction="#refreshSavedRolls"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
+
+    <Label text="Roll History:"/>
+    <TextArea fx:id="historyArea" editable="false" wrapText="true" style="-fx-min-height: 150;"/>
+
+    <Button text="Close" onAction="#closeWindow" style="-fx-background-color: #ff4444; -fx-text-fill: white;"/>
+</VBox>

@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CharacterCreationController {
-    @FXML private Button previousButton;
     @FXML private Spinner<Integer> strSpinner;
     @FXML private Spinner<Integer> dexSpinner;
     @FXML private Spinner<Integer> conSpinner;
@@ -29,6 +28,7 @@ public class CharacterCreationController {
     @FXML private Spinner<Integer> spellAttackBonusSpinner;
     @FXML private Spinner<Integer> initiativeSpinner;
     @FXML private Spinner<Integer> maxHPSpinner;
+    @FXML private Spinner<Integer> levelSpinner;
     @FXML private TextField maxHitDiceField;
     @FXML private TextField nameField;
     @FXML private TextField classField;
@@ -37,54 +37,66 @@ public class CharacterCreationController {
     @FXML private TextField backgroundField;
     @FXML private TextField raceField;
     @FXML private TextField multiclassField;
-    @FXML private Spinner<Integer> levelSpinner;
-    @FXML private Button nextButton;
-
     @FXML private TextField ageField;
     @FXML private TextField heightField;
     @FXML private TextField weightField;
     @FXML private TextField eyesField;
     @FXML private TextField hairField;
     @FXML private TextField skinField;
+    @FXML private Button previousButton;
+    @FXML private Button nextButton;
 
-    CharactersDAO charactersDAO = new CharactersDAO();
+    private final CharactersDAO charactersDAO = new CharactersDAO();
 
     @FXML
     public void initialize() {
-        // Statistiche base (1–20)
-        strSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        dexSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        conSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        intSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        wisSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        chaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
+        setupSpinners();
+    }
 
-        // Bonus competenza (2–6 tipico range D&D 5e)
+    private void setupSpinners() {
+        setupStatSpinner(strSpinner, 10);
+        setupStatSpinner(dexSpinner, 10);
+        setupStatSpinner(conSpinner, 10);
+        setupStatSpinner(intSpinner, 10);
+        setupStatSpinner(wisSpinner, 10);
+        setupStatSpinner(chaSpinner, 10);
+
         profBonSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 6, 2));
-
-        // Level (1–20)
         levelSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1));
-
-        // Initiative (può essere negativo in D&D)
         initiativeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 20, 0));
-
-        // HP (0–999)
         maxHPSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 999, 10));
-
-        // Spell Save DC (8–30)
         spellSaveDCSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(8, 30, 10));
-
-        // Spell Attack Bonus (0–20)
         spellAttackBonusSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 20, 5));
-
-        // Inspiration (0 o 1, booleano mascherato)
         inspSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1, 0));
     }
 
+    private void setupStatSpinner(Spinner<Integer> spinner, int defaultValue) {
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, defaultValue));
+    }
 
-    public void handleNextClick(ActionEvent actionEvent) throws IOException {
-        Characters character = new Characters(
-                Session.getUserId(),
+    @FXML
+    private void handleNextClick(ActionEvent actionEvent) throws IOException {
+        Characters character = createCharacterFromInput();
+
+        if (!validateCharacter(character)) {
+            return;
+        }
+
+        Session.setCharacters(character);
+        charactersDAO.save(character);
+
+        navigateToMenuPage();
+    }
+
+    @FXML
+    private void handlePreviousClick(ActionEvent actionEvent) throws IOException {
+        navigateToMenuPage();
+    }
+
+    private Characters createCharacterFromInput() {
+        return new Characters(
+                0, // ID temporaneo
+                String.valueOf(Session.getUserId()), // Converti a String se necessario
                 nameField.getText(),
                 classField.getText(),
                 subclassField.getText(),
@@ -94,21 +106,21 @@ public class CharacterCreationController {
                 backgroundField.getText(),
                 alignmentField.getText(),
                 initiativeSpinner.getValue(),
-                30,
-                0,
+                30, // speed
+                0, // exp
                 strSpinner.getValue(),
                 dexSpinner.getValue(),
                 conSpinner.getValue(),
                 intSpinner.getValue(),
                 wisSpinner.getValue(),
                 chaSpinner.getValue(),
-                false,
+                inspSpinner.getValue() == 1, // inspiration
                 profBonSpinner.getValue(),
                 maxHPSpinner.getValue(),
-                maxHPSpinner.getValue(),
-                0,
+                maxHPSpinner.getValue(), // currentHP = maxHP
+                0, // tempHP
                 maxHitDiceField.getText(),
-                maxHitDiceField.getText(),
+                maxHitDiceField.getText(), // hitDice = totalHitDice
                 spellSaveDCSpinner.getValue(),
                 spellAttackBonusSpinner.getValue(),
                 ageField.getText(),
@@ -117,20 +129,30 @@ public class CharacterCreationController {
                 skinField.getText(),
                 heightField.getText(),
                 weightField.getText(),
-                "NONE"
+                "NONE" // portrait_url
         );
-        Session.setCharacters(character);
-        System.out.println(Session.getUserId());
-        System.out.println(Session.getCharacters());
-        charactersDAO.save(character);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) nameField.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
     }
 
-    public void handlePreviousClick(ActionEvent actionEvent) throws IOException {
+    private boolean validateCharacter(Characters character) {
+        if (character.getName() == null || character.getName().trim().isEmpty()) {
+            showError("Il nome è obbligatorio");
+            return false;
+        }
+
+        if (character.getChar_class() == null || character.getChar_class().trim().isEmpty()) {
+            showError("La classe è obbligatoria");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showError(String message) {
+        // Implementa la visualizzazione dell'errore (es. Alert di JavaFX)
+        System.err.println("Errore: " + message);
+    }
+
+    private void navigateToMenuPage() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) nameField.getScene().getWindow();

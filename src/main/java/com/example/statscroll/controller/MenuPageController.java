@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,6 +29,28 @@ public class MenuPageController {
         loadScene(event, "/fxml/login.fxml");
     }
 
+    @FXML
+    private void handleDiceRoller(ActionEvent event) {
+        try {
+            // Carica il file FXML del dice roller
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/diceRoller.fxml"));
+            Parent root = loader.load();
+
+            // Crea una nuova finestra
+            Stage diceRollerStage = new Stage();
+            diceRollerStage.setTitle("D&D Dice Roller");
+            diceRollerStage.setScene(new Scene(root));
+            diceRollerStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Could not load Dice Roller", e.getMessage());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            showAlert("Error", "Resource not found", "Dice Roller FXML file not found");
+        }
+    }
+
     private void loadScene(ActionEvent event, String fxmlPath) {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
@@ -36,6 +59,18 @@ public class MenuPageController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert("Loading Error", "Failed to load scene", "Could not load: " + fxmlPath);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            showAlert("Resource Error", "File not found", "FXML file not found: " + fxmlPath);
         }
+    }
+
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
