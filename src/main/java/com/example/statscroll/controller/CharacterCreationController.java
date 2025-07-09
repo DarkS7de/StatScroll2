@@ -2,20 +2,22 @@ package com.example.statscroll.controller;
 
 import com.example.statscroll.dao.CharactersDAO;
 import com.example.statscroll.model.Characters;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class CharacterCreationController {
+    // Liste predefinite
+    private final String[] CLASSES = {"Paladino", "Guerriero", "Ladro", "Chierico", "Druido", "Mago"};
+    private final String[] RACES = {"Umano", "Elfo", "Mezzelfo", "Tiefling", "Nano"};
+
     @FXML private Spinner<Integer> strSpinner;
     @FXML private Spinner<Integer> dexSpinner;
     @FXML private Spinner<Integer> conSpinner;
@@ -45,12 +47,19 @@ public class CharacterCreationController {
     @FXML private TextField skinField;
     @FXML private Button previousButton;
     @FXML private Button nextButton;
+    @FXML private ChoiceBox<String> classChoiceBox;
+    @FXML private ChoiceBox<String> raceChoiceBox;
 
     private final CharactersDAO charactersDAO = new CharactersDAO();
 
     @FXML
     public void initialize() {
         setupSpinners();
+    }
+
+    private void setupChoiceBoxes() {
+        classChoiceBox.setItems(FXCollections.observableArrayList(CLASSES));
+        raceChoiceBox.setItems(FXCollections.observableArrayList(RACES));
     }
 
     private void setupSpinners() {
@@ -68,6 +77,8 @@ public class CharacterCreationController {
         spellSaveDCSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(8, 30, 10));
         spellAttackBonusSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 20, 5));
         inspSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1, 0));
+        classChoiceBox.setValue(CLASSES[0]);
+        raceChoiceBox.setValue(RACES[0]);
     }
 
     private void setupStatSpinner(Spinner<Integer> spinner, int defaultValue) {
@@ -83,8 +94,7 @@ public class CharacterCreationController {
         }
 
         Session.setCharacters(character);
-        charactersDAO.save(character);
-
+        new CharactersDAO().save(character);
         navigateToMenuPage();
     }
 
@@ -99,12 +109,8 @@ public class CharacterCreationController {
                 String.valueOf(Session.getUserId()), // Converti a String se necessario
                 nameField.getText(),
                 classField.getText(),
-                subclassField.getText(),
-                multiclassField.getText(),
                 levelSpinner.getValue(),
                 raceField.getText(),
-                backgroundField.getText(),
-                alignmentField.getText(),
                 initiativeSpinner.getValue(),
                 30, // speed
                 0, // exp
@@ -139,8 +145,13 @@ public class CharacterCreationController {
             return false;
         }
 
-        if (character.getChar_class() == null || character.getChar_class().trim().isEmpty()) {
-            showError("La classe è obbligatoria");
+        if (character.getChar_class() == null) {
+            showError("Seleziona una classe");
+            return false;
+        }
+
+        if (character.getRace() == null) {
+            showError("Seleziona una razza");
             return false;
         }
 

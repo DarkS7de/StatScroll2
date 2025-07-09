@@ -3,15 +3,13 @@ package com.example.statscroll.controller;
 import com.example.statscroll.dao.CharactersDAO;
 import com.example.statscroll.model.Characters;
 import com.example.statscroll.util.CharacterPDFExporter;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -47,18 +45,22 @@ public class CharacterSheetController {
     public Button saveButton;
     public Spinner<Integer> levelSpinner;
     public Button previousButton;
+    public ChoiceBox<String> classChoiceBox;
+    public ChoiceBox<String> raceChoiceBox;
 
     @FXML
     public void initialize() {
         Characters selectedCharacter = Session.getCharacters();
 
-        multiclassField.setText(selectedCharacter.getMulticlass());
+        // Inizializza le ChoiceBox con le opzioni
+        classChoiceBox.setItems(FXCollections.observableArrayList(
+                "Paladino", "Guerriero", "Ladro", "Chierico", "Druido", "Mago"));
+        raceChoiceBox.setItems(FXCollections.observableArrayList(
+                "Umano", "Elfo", "Mezzelfo", "Tiefling", "Nano"));
+
         nameField.setText(selectedCharacter.getName());
         classField.setText(selectedCharacter.getChar_class());
-        subclassField.setText(selectedCharacter.getSubclass());
         raceField.setText(selectedCharacter.getRace());
-        alignmentField.setText(selectedCharacter.getAlignment());
-        backgroundField.setText(selectedCharacter.getBackground());
         maxHitDiceField.setText(selectedCharacter.getHitdice());
         ageField.setText(selectedCharacter.getAge());
         eyesField.setText(selectedCharacter.getEyes());
@@ -118,12 +120,8 @@ public class CharacterSheetController {
                 Session.getUserId(),
                 nameField.getText(),
                 classField.getText(),
-                subclassField.getText(),
-                multiclassField.getText(),
                 levelSpinner.getValue(),
                 raceField.getText(),
-                backgroundField.getText(),
-                alignmentField.getText(),
                 initiativeSpinner.getValue(),
                 30,
                 0,

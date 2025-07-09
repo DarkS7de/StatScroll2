@@ -24,11 +24,8 @@ public class CharacterPDFExporter {
 
             document.add(new Paragraph("Nome: " + character.getName(), bodyFont));
             document.add(new Paragraph("Classe: " + character.getChar_class(), bodyFont));
-            document.add(new Paragraph("Sottoclasse: " + character.getSubclass(), bodyFont));
             document.add(new Paragraph("Livello: " + character.getLevel(), bodyFont));
             document.add(new Paragraph("Razza: " + character.getRace(), bodyFont));
-            document.add(new Paragraph("Background: " + character.getBackground(), bodyFont));
-            document.add(new Paragraph("Allineamento: " + character.getAlignment(), bodyFont));
             document.add(new Paragraph("Iniziativa: " + character.getInitiative(), bodyFont));
             document.add(new Paragraph("Punti ferita massimi: " + character.getMaxhp(), bodyFont));
             document.add(new Paragraph("Statistiche:", bodyFont));

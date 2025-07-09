@@ -7,12 +7,8 @@ public class Characters {
     private String user_id;
     private String name;
     private String char_class;
-    private String subclass;
-    private String multiclass;
     private int level;
     private String race;
-    private String background;
-    private String alignment;
     private int initiative;
     private int speed;
     private int exp;
@@ -42,9 +38,7 @@ public class Characters {
     // Costruttori
     public Characters() {}
 
-    public Characters(int id, String user_id, String name, String char_class, String subclass,
-                      String multiclass, int level, String race, String background,
-                      String alignment, int initiative, int speed, int exp, int str,
+    public Characters(int id, String user_id, String name, String char_class, int level, String race, int initiative, int speed, int exp, int str,
                       int dex, int con, int intel, int wis, int cha, boolean inspiration,
                       int profbonus, int maxhp, int currenthp, int temphp, String totalhitdice,
                       String hitdice, int spellsavedc, int spellattackbonus, String age,
@@ -54,12 +48,8 @@ public class Characters {
         this.user_id = user_id;
         this.name = name;
         this.char_class = char_class;
-        this.subclass = subclass;
-        this.multiclass = multiclass;
         this.level = level;
         this.race = race;
-        this.background = background;
-        this.alignment = alignment;
         this.initiative = initiative;
         this.speed = speed;
         this.exp = exp;
@@ -100,23 +90,11 @@ public class Characters {
     public String getChar_class() { return char_class; }
     public void setChar_class(String char_class) { this.char_class = char_class; }
 
-    public String getSubclass() { return subclass; }
-    public void setSubclass(String subclass) { this.subclass = subclass; }
-
-    public String getMulticlass() { return multiclass; }
-    public void setMulticlass(String multiclass) { this.multiclass = multiclass; }
-
     public int getLevel() { return level; }
     public void setLevel(int level) { this.level = level; }
 
     public String getRace() { return race; }
     public void setRace(String race) { this.race = race; }
-
-    public String getBackground() { return background; }
-    public void setBackground(String background) { this.background = background; }
-
-    public String getAlignment() { return alignment; }
-    public void setAlignment(String alignment) { this.alignment = alignment; }
 
     public int getInitiative() { return initiative; }
     public void setInitiative(int initiative) { this.initiative = initiative; }

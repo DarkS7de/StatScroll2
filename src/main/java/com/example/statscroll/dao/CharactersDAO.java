@@ -73,12 +73,8 @@ public class CharactersDAO {
             ps.setString(1, c.getUser_id());
             ps.setString(2, c.getName());
             ps.setString(3, c.getChar_class());
-            ps.setString(4, c.getSubclass());
-            ps.setString(5, c.getMulticlass());
             ps.setInt(6, c.getLevel());
             ps.setString(7, c.getRace());
-            ps.setString(8, c.getBackground());
-            ps.setString(9, c.getAlignment());
             ps.setInt(10, c.getInitiative());
             ps.setInt(11, c.getSpeed());
             ps.setInt(12, c.getExp());
@@ -126,12 +122,8 @@ public class CharactersDAO {
                         rs.getString("user_id"),
                         rs.getString("name"),
                         rs.getString("char_class"),
-                        rs.getString("subclass"),
-                        rs.getString("multiclass"),
                         rs.getInt("level"),
                         rs.getString("race"),
-                        rs.getString("background"),
-                        rs.getString("alignment"),
                         rs.getInt("initiative"),
                         rs.getInt("speed"),
                         rs.getInt("exp"),
@@ -184,12 +176,8 @@ public class CharactersDAO {
                         rs.getString("user_id"),
                         rs.getString("name"),
                         rs.getString("char_class"),
-                        rs.getString("subclass"),
-                        rs.getString("multiclass"),
                         rs.getInt("level"),
                         rs.getString("race"),
-                        rs.getString("background"),
-                        rs.getString("alignment"),
                         rs.getInt("initiative"),
                         rs.getInt("speed"),
                         rs.getInt("exp"),
@@ -241,12 +229,8 @@ public class CharactersDAO {
                         rs.getString("user_id"),
                         rs.getString("name"),
                         rs.getString("char_class"),
-                        rs.getString("subclass"),
-                        rs.getString("multiclass"),
                         rs.getInt("level"),
                         rs.getString("race"),
-                        rs.getString("background"),
-                        rs.getString("alignment"),
                         rs.getInt("initiative"),
                         rs.getInt("speed"),
                         rs.getInt("exp"),
@@ -313,12 +297,8 @@ public class CharactersDAO {
             ps.setString(1, c.getUser_id());
             ps.setString(2, c.getName());
             ps.setString(3, c.getChar_class());
-            ps.setString(4, c.getSubclass());
-            ps.setString(5, c.getMulticlass());
             ps.setInt(6, c.getLevel());
             ps.setString(7, c.getRace());
-            ps.setString(8, c.getBackground());
-            ps.setString(9, c.getAlignment());
             ps.setInt(10, c.getInitiative());
             ps.setInt(11, c.getSpeed());
             ps.setInt(12, c.getExp());
