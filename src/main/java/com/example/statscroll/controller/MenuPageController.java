@@ -21,7 +21,7 @@ public class MenuPageController {
 
     @FXML
     private void handleCreateCharacter(ActionEvent event) {
-        loadScene(event, "/fxml/CharacterCreation.fxml");
+        loadScene(event, "/fxml/characterCreationPage1.fxml");
     }
 
     @FXML
