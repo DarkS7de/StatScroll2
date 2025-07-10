@@ -10,16 +10,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.IOException;
 
-public class CharacterCreationController {
+public class CharacterSheetController {
 
     // Pagina 1 fields
     @FXML public TextField nameField;
-    @FXML public TextField classField;
-    @FXML public TextField raceField;
+    @FXML public ChoiceBox<String> classChoiceBox;
+    @FXML public ChoiceBox<String> raceChoiceBox;
     @FXML public Spinner<Integer> levelSpinner;
     @FXML public TextField ageField;
     @FXML public TextField heightField;
@@ -44,22 +47,84 @@ public class CharacterCreationController {
 
     @FXML
     public void initialize() {
-        // Inizializza gli spinner con valori di default
-        strSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        dexSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        conSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        intSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        wisSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        chaSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 10));
-        profBonSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 6, 2));
-        levelSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 20, 1));
-        initiativeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(-10, 20, 0));
-        maxHPSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 999, 10));
-        inspSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1, 0));
+        // Inizializza i ChoiceBox con le opzioni
+        initializeChoiceBoxes();
+
+        // Configura i campi numerici
+        initializeNumericFields();
+
+        // Configura gli spinner
+        initializeSpinners();
+    }
+
+    private void initializeChoiceBoxes() {
+        classChoiceBox.setItems(FXCollections.observableArrayList(
+                "Barbaro", "Bardo", "Chierico", "Druido", "Guerriero",
+                "Ladro", "Mago", "Monaco", "Paladino", "Ranger", "Stregone", "Warlock"));
+
+        raceChoiceBox.setItems(FXCollections.observableArrayList(
+                "Umano", "Elfo", "Nano", "Halfling", "Mezzelfo",
+                "Mezzorco", "Tiefling", "Dragonide", "Gnomo"));
+
+        // Imposta valori di default
+        classChoiceBox.setValue("Guerriero");
+        raceChoiceBox.setValue("Umano");
+    }
+
+    private void initializeNumericFields() {
+        // Configura i TextField numerici
+        setupNumericField(ageField);
+        setupNumericField(heightField);
+        setupNumericField(weightField);
+
+        // Configura il campo per i dadi vita con formato speciale (es. 3d8)
+        maxHitDiceField.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.getControlNewText().matches("\\d*d\\d*")) {
+                return change;
+            }
+            return null;
+        }));
+    }
+
+    private void initializeSpinners() {
+        // Configura gli spinner con valori appropriati
+        initializeSpinner(levelSpinner, 1, 20, 1);
+        initializeSpinner(strSpinner, 1, 20, 10);
+        initializeSpinner(dexSpinner, 1, 20, 10);
+        initializeSpinner(conSpinner, 1, 20, 10);
+        initializeSpinner(intSpinner, 1, 20, 10);
+        initializeSpinner(wisSpinner, 1, 20, 10);
+        initializeSpinner(chaSpinner, 1, 20, 10);
+        initializeSpinner(profBonSpinner, 2, 6, 2);
+        initializeSpinner(initiativeSpinner, -10, 20, 0);
+        initializeSpinner(maxHPSpinner, 1, 999, 10);
+        initializeSpinner(inspSpinner, 0, 1, 0);
+    }
+
+    private void initializeSpinner(Spinner<Integer> spinner, int min, int max, int initial) {
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, initial));
+
+        // Formattazione per mostrare sempre il valore come numero
+        spinner.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), initial,
+                change -> {
+                    String newText = change.getControlNewText();
+                    if (newText.matches("-?\\d*")) {
+                        return change;
+                    }
+                    return null;
+                }));
+    }
+
+    private void setupNumericField(TextField field) {
+        field.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.getControlNewText().matches("\\d*")) {
+                return change;
+            }
+            return null;
+        }));
     }
 
     public void handleNextClick(ActionEvent actionEvent) throws IOException {
-        // Salva i dati nella sessione prima di passare alla pagina successiva
         saveToSession();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/characterModificationPage2.fxml"));
@@ -70,7 +135,6 @@ public class CharacterCreationController {
     }
 
     public void handlePreviousClick(ActionEvent actionEvent) throws IOException {
-        // Salva i dati nella sessione prima di tornare alla pagina precedente
         saveToSession();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/characterModificationPage1.fxml"));
@@ -81,13 +145,29 @@ public class CharacterCreationController {
     }
 
     public void handleSaveClick(ActionEvent actionEvent) throws IOException {
-        Characters character = new Characters(
-                0, // ID verrà generato dal DAO
+        Characters character = createCharacterFromFields();
+
+        CharactersDAO characterDAO = new CharactersDAO();
+        characterDAO.save(character);
+
+        // Torna al menu principale dopo il salvataggio
+        returnToMenu(actionEvent);
+    }
+
+    public void handlePDFExport(ActionEvent actionEvent) {
+        saveToSession();
+        CharacterPDFExporter exporter = new CharacterPDFExporter();
+        exporter.exportToPDF(Session.getCharacters(), Session.getCharacters().getName() + ".pdf");
+    }
+
+    private Characters createCharacterFromFields() {
+        return new Characters(
+                Session.getCharacters() != null ? Session.getCharacters().getId() : 0,
                 Session.getUserId(),
                 nameField.getText(),
-                classField.getText(),
+                classChoiceBox.getValue(),
                 levelSpinner.getValue(),
-                raceField.getText(),
+                raceChoiceBox.getValue(),
                 initiativeSpinner.getValue(),
                 30, // speed
                 0, // armorclass
@@ -104,58 +184,6 @@ public class CharacterCreationController {
                 0, // temporaryHP
                 maxHitDiceField.getText(),
                 maxHitDiceField.getText(), // currentHitDice
-                spellSaveDCSpinner.getValue(),
-                spellAttackBonusSpinner.getValue(),
-                ageField.getText(),
-                eyesField.getText(),
-                hairField.getText(),
-                skinField.getText(),
-                heightField.getText(),
-                weightField.getText(),
-                inventoryField.getText()
-        );
-
-        CharactersDAO characterDAO = new CharactersDAO();
-        characterDAO.save(character);
-
-        // Torna al menu principale dopo il salvataggio
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
-    public void handlePDFExport(ActionEvent actionEvent) {
-        saveToSession();
-        CharacterPDFExporter exporter = new CharacterPDFExporter();
-        exporter.exportToPDF(Session.getCharacters(), Session.getCharacters().getName() + ".pdf");
-    }
-
-    private void saveToSession() {
-        Characters character = new Characters(
-                Session.getCharacters() != null ? Session.getCharacters().getId() : 0,
-                Session.getUserId(),
-                nameField.getText(),
-                classField.getText(),
-                levelSpinner.getValue(),
-                raceField.getText(),
-                initiativeSpinner.getValue(),
-                30,
-                0,
-                strSpinner.getValue(),
-                dexSpinner.getValue(),
-                conSpinner.getValue(),
-                intSpinner.getValue(),
-                wisSpinner.getValue(),
-                chaSpinner.getValue(),
-                inspSpinner.getValue() == 1,
-                profBonSpinner.getValue(),
-                maxHPSpinner.getValue(),
-                maxHPSpinner.getValue(),
-                0,
-                maxHitDiceField.getText(),
-                maxHitDiceField.getText(),
                 0, // spellSaveDC
                 0, // spellAttackBonus
                 ageField.getText(),
@@ -166,6 +194,18 @@ public class CharacterCreationController {
                 weightField.getText(),
                 inventoryField.getText()
         );
+    }
+
+    private void saveToSession() {
+        Characters character = createCharacterFromFields();
         Session.setCharacters(character);
+    }
+
+    private void returnToMenu(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) ((Button)actionEvent.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
