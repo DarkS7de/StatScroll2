@@ -3,34 +3,50 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.MenuPageController">
 
-    <children>
-        <AnchorPane prefHeight="400.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
-            <children>
-                <Label layoutX="59.0" layoutY="30.0" prefHeight="56.0" prefWidth="525.0" text="Welcome To StatScroll">
+  <AnchorPane prefHeight="400.0" prefWidth="640.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.MenuPageController">
+      <children>
+      <StackPane prefHeight="83.0" prefWidth="640.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+                <Label prefHeight="56.0" prefWidth="450.0" text="Welcome To StatScroll">
                     <font>
-                        <Font name="Oriya MN" size="45.0" />
+                        <Font name="Times New Roman Bold" size="45.0" />
                     </font>
                 </Label>
-
-                <Button fx:id="myCharactersButton" layoutX="214.0" layoutY="127.0" mnemonicParsing="false" onAction="#handleMyCharacters" prefHeight="66.0" prefWidth="214.0" styleClass="button-signin" stylesheets="@../styles.css" text="My Characters">
+         </children>
+      </StackPane>
+      <StackPane layoutX="14.0" layoutY="309.0" prefHeight="77.0" prefWidth="113.0" AnchorPane.leftAnchor="0.0">
+         <children>
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBack" prefHeight="38.0" prefWidth="88.0" styleClass="button-signin" text="Back" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="213.0" layoutY="283.0" prefHeight="83.0" prefWidth="214.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+                <Button onAction="#handleDiceRoller" prefHeight="52.0" prefWidth="214.0" styleClass="button-signin" stylesheets="@../styles.css" text="Dice Roller" />
+         </children>
+      </StackPane>
+      <StackPane layoutX="213.0" layoutY="117.0" prefHeight="83.0" prefWidth="214.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+      
+                <Button fx:id="myCharactersButton" mnemonicParsing="false" onAction="#handleMyCharacters" prefHeight="56.0" prefWidth="214.0" styleClass="button-signin" stylesheets="@../styles.css" text="My Characters">
                     <font>
                         <Font name="Serif Bold Italic" size="25.0" />
                     </font>
                 </Button>
-
-                <Button fx:id="createCharacterButton" layoutX="213.0" layoutY="235.0" mnemonicParsing="false" onAction="#handleCreateCharacter" prefHeight="66.0" prefWidth="214.0" styleClass="button-signin" text="Create New Character">
+         </children>
+      </StackPane>
+      <StackPane layoutX="213.0" layoutY="200.0" prefHeight="83.0" prefWidth="214.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+      
+                <Button fx:id="createCharacterButton" mnemonicParsing="false" onAction="#handleCreateCharacter" prefHeight="56.0" prefWidth="214.0" styleClass="button-signin" text="Create New Character">
                     <font>
                         <Font name="Serif Bold Italic" size="20.0" />
                     </font>
                 </Button>
-                <Button text="Dice Roller" onAction="#handleDiceRoller" />
-                <Button fx:id="backButton" layoutX="14.0" layoutY="348.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="38.0" prefWidth="88.0" styleClass="button-signin" text="Back" />
-            </children>
-        </AnchorPane>
-    </children>
-</VBox>
+         </children>
+      </StackPane>
+      </children>
+  </AnchorPane>

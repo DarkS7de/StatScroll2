@@ -28,6 +28,25 @@ public class RegisterController {
     @FXML private Label errorLabel;
 
     @FXML
+    private void handleBack(ActionEvent event) {
+        loadScene(event, "/fxml/login.fxml");
+    }
+
+    private void loadScene(ActionEvent event, String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            ErrorHandler.showErrorDialog("Error", "Navigation error",
+                    "Cannot load the requested page.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void onRegister(ActionEvent event) {
         // Resetta eventuali errori precedenti
         ErrorHandler.resetErrorLabel(errorLabel);
