@@ -21,9 +21,21 @@ public class MenuPageController {
 
     @FXML
     private void handleCreateCharacter(ActionEvent event) {
-        loadScene(event, "/fxml/characterCreationPage1.fxml");
-    }
+        try {
+            // Modifica il percorso per puntare alla posizione corretta
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/statscroll/view/characterCreationPage1.fxml"));
+            Parent root = loader.load();
 
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Loading Error", "Failed to load character creation",
+                    "Path used: /com/example/statscroll/view/characterCreationPage1.fxml\n" +
+                            "Error: " + e.getMessage());
+        }
+    }
     @FXML
     private void handleBack(ActionEvent event) {
         loadScene(event, "/fxml/login.fxml");

@@ -7,12 +7,13 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.HBox?>
-<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.CharacterCreationPage1Controller">
+<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.CharacterSheetController">
    <children>
       <VBox prefHeight="342.0" prefWidth="472.0" spacing="10" style="-fx-padding: 20;">
+
          <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Creazione Personaggio - Pagina 1/2" />
          <Separator />
 
@@ -52,10 +53,7 @@
          <Label text="Pelle:" />
          <TextField fx:id="skinField" />
 
-         <HBox spacing="10">
-            <Button fx:id="wikiButton" text="Wiki" />
-            <Button fx:id="nextButton" onAction="#handleNextClick" prefHeight="38.0" prefWidth="84.0" styleClass="button-signin" text="Avanti" />
-         </HBox>
+         <Button fx:id="nextButton" onAction="#handleNextClick" prefHeight="38.0" prefWidth="84.0" styleClass="button-signin" text="Avanti" />
       </VBox>
    </children>
 </AnchorPane>
