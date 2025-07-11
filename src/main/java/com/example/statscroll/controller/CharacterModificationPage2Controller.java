@@ -129,6 +129,18 @@ public class CharacterModificationPage2Controller {
         dao.update(currentCharacter);
 
         showInfoAlert("Personaggio aggiornato", "Le modifiche sono state salvate con successo.");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/myCharacters.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) saveButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException ex) {  // Cambiato da 'e' a 'ex' per evitare conflitto
+            showErrorAlert("Errore", "Impossibile tornare alla pagina dei personaggi: " + ex.getMessage());
+            ex.printStackTrace();
+        }
     }
 
     @FXML

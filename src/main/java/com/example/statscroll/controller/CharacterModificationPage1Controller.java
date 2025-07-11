@@ -114,6 +114,7 @@ public class CharacterModificationPage1Controller {
         savePage1Data();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/characterModificationPage2.fxml"));
+            loader.setControllerFactory(clazz -> new CharacterModificationPage2Controller());
             Parent root = loader.load();
 
             CharacterModificationPage2Controller controller = loader.getController();
@@ -148,6 +149,7 @@ public class CharacterModificationPage1Controller {
             showErrorAlert("Errore nel tornare al menu", e.getMessage());
         }
     }
+
 
     private void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

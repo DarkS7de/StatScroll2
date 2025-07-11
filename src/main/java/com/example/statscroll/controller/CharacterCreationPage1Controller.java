@@ -42,7 +42,7 @@ public class CharacterCreationPage1Controller {
         configureNumericField(weightField); // Solo numeri interi per il peso
 
         // Inizializza le ChoiceBox
-        classChoiceBox.getItems().addAll("Guerriero", "Mago", "Ladro", "Chierico", "Ranger", "Stregone");
+        classChoiceBox.getItems().addAll("Guerriero", "Mago", "Ladro", "Chierico", "Paladino", "Druido");
         raceChoiceBox.getItems().addAll("Umano", "Elfo", "Nano", "Halfling", "Mezzelfo", "Tiefling");
 
         // Configurazione dello Spinner

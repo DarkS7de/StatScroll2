@@ -5,7 +5,8 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="765.0" prefWidth="518.0" stylesheets="@../styles.css"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.statscroll.controller.CharacterModificationPage2Controller">
     <children>
         <!-- Area fissa superiore -->
         <Label layoutX="16.0" layoutY="14.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Modifica Personaggio - Pagina 2/2" />
@@ -16,6 +17,7 @@
         <ScrollPane layoutX="0.0" layoutY="60.0" prefHeight="650.0" prefWidth="518.0" vbarPolicy="AS_NEEDED">
             <content>
                 <AnchorPane prefHeight="1000.0" prefWidth="500.0">
+                    <!-- Statistiche -->
                     <Label layoutX="20.0" layoutY="10.0" style="-fx-font-weight: bold;" text="Statistiche" />
 
                     <!-- Prima colonna -->
@@ -57,8 +59,11 @@
                     <Label layoutX="20.0" layoutY="510.0" text="Velocità:" />
                     <Spinner fx:id="speedSpinner" layoutX="20.0" layoutY="535.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="20.0" layoutY="580.0" style="-fx-font-weight: bold;" text="Inventario" />
-                    <TextArea fx:id="inventoryField" layoutX="20.0" layoutY="605.0" prefHeight="150.0" prefWidth="450.0" />
+                    <Label layoutX="20.0" layoutY="580.0" text="URL Ritratto:" />
+                    <TextField fx:id="portraitUrlField" layoutX="20.0" layoutY="605.0" prefWidth="300.0" />
+
+                    <Label layoutX="20.0" layoutY="650.0" style="-fx-font-weight: bold;" text="Inventario" />
+                    <TextArea fx:id="inventoryField" layoutX="20.0" layoutY="675.0" prefHeight="150.0" prefWidth="450.0" />
                 </AnchorPane>
             </content>
         </ScrollPane>
@@ -66,9 +71,9 @@
         <!-- Area fissa inferiore con pulsanti -->
         <AnchorPane layoutX="0.0" layoutY="715.0" prefHeight="50.0" prefWidth="518.0" style="-fx-background-color: white;">
             <children>
-                <Button fx:id="previousButton" layoutX="15.0" layoutY="10.0" text="&lt;&lt; Indietro" />
-                <Button fx:id="pdfExportButton" layoutX="212.0" layoutY="10.0" text="Esporta PDF" />
-                <Button fx:id="saveButton" layoutX="390.0" layoutY="10.0" text="Salva Modifiche" />
+                <Button fx:id="previousButton" layoutX="15.0" layoutY="10.0" onAction="#handlePreviousClick" text="&lt;&lt; Indietro" />
+                <Button fx:id="pdfButton" layoutX="212.0" layoutY="10.0" onAction="#handlePDFExport" text="Esporta PDF" />
+                <Button fx:id="saveButton" layoutX="390.0" layoutY="10.0" onAction="#handleSaveClick" text="Salva Modifiche" />
             </children>
         </AnchorPane>
     </children>

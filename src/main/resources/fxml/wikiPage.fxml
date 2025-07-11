@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" spacing="10" style="-fx-padding: 10;">
+    <Label text="Wiki" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <HBox spacing="10">
+        <ListView fx:id="categoriesListView" prefWidth="200" prefHeight="400"/>
+        <TextArea fx:id="contentTextArea" prefWidth="400" prefHeight="400" wrapText="true" editable="false"/>
+    </HBox>
+</VBox>

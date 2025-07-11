@@ -5,7 +5,8 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="494.0" prefWidth="589.0" stylesheets="@../styles.css"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.statscroll.controller.CharacterModificationPage1Controller">
    <children>
       <Label layoutX="20.0" layoutY="20.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Modifica Personaggio - Pagina 1/2">
          <font>
@@ -49,6 +50,6 @@
       <TextField fx:id="skinField" layoutX="351.0" layoutY="387.0" prefHeight="41.0" prefWidth="152.0"/>
 
       <Button fx:id="wikiButton" layoutX="473.0" layoutY="206.0" prefHeight="38.0" prefWidth="60.0" text="Wiki"/>
-      <Button fx:id="nextButton" layoutX="491.0" layoutY="438.0" prefHeight="38.0" prefWidth="84.0" text="Avanti"/>
+      <Button fx:id="nextButton" layoutX="491.0" layoutY="438.0" onAction="#handleNextClick" prefHeight="38.0" prefWidth="84.0" text="Avanti"/>
    </children>
 </AnchorPane>

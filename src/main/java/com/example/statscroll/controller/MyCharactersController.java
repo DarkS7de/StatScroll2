@@ -83,9 +83,16 @@ public class MyCharactersController implements Initializable {
         if (selectedName != null) {
             Integer characterId = nameToIdMap.get(selectedName);
             Characters character = charactersDAO.findById(characterId);
-            Session.setCurrentCharacter(character);
             try {
-                openCharacterDetailPage();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/characterModificationPage1.fxml"));
+                Parent root = loader.load();
+
+                CharacterModificationPage1Controller controller = loader.getController();
+                controller.setCharacter(character);
+
+                Stage stage = (Stage) charactersListVIew.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
                 showErrorAlert("Errore", "Impossibile aprire i dettagli del personaggio");
@@ -119,7 +126,7 @@ public class MyCharactersController implements Initializable {
         // Debug: verifica l'ID utente
         System.out.println("Caricamento personaggi per user ID: " + Session.getUserId());
 
-        List<Characters> myCharacters = charactersDAO.findByUserId(Session.getUserId().toString());
+        List<Characters> myCharacters = charactersDAO.findByUserId(Session.getUserId());
 
         // Debug: verifica i personaggi trovati
         System.out.println("Personaggi trovati: " + myCharacters.size());

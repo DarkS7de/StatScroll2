@@ -15,7 +15,7 @@ public class CharactersDAO {
             stmt.execute("""
                 CREATE TABLE IF NOT EXISTS characters (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    user_id VARCHAR,
+                    user_id INT NOT NULL,
                     name VARCHAR NOT NULL,
                     char_class VARCHAR NOT NULL,
                     level INT DEFAULT 1,
@@ -55,7 +55,7 @@ public class CharactersDAO {
                 str, dex, con, intel, wis, cha, inspiration, profbonus,
                 maxhp, hitdice, age, eyes, hair, skin, height, weight, 
                 inventory, portrait_url
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
 
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
@@ -145,14 +145,14 @@ public class CharactersDAO {
         return null;
     }
 
-    public List<Characters> findByUserId(String userId) {
+    public List<Characters> findByUserId(Integer userId) {
         List<Characters> characters = new ArrayList<>();
         String sql = "SELECT * FROM characters WHERE user_id = ?";
 
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, userId);
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

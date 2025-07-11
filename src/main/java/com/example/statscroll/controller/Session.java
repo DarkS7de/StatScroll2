@@ -103,4 +103,8 @@ public class Session {
         }
         Session.username = username.trim();
     }
+
+    public static void setCharacters(Characters character) {
+        Session.character=character;
+    }
 }
