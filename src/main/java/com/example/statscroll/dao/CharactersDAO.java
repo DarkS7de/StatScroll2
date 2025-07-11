@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharactersDAO {
-    private final String url = "jdbc:h2:./statscroll_db";
+    private final String url = "jdbc:h2:./statScrolldb";
 
     public CharactersDAO() {
         try (Connection conn = DriverManager.getConnection(url, "sa", "");

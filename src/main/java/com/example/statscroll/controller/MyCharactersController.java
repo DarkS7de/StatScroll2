@@ -48,6 +48,10 @@ public class MyCharactersController implements Initializable {
         setupDoubleClickHandler();
     }
 
+    public void refreshCharacterList() {
+        loadCharactersFromDatabase();
+    }
+
     private void setupClassFilter() {
         classFilterComboBox.setItems(FXCollections.observableArrayList(dndClasses));
         classFilterComboBox.getSelectionModel().selectFirst();
@@ -79,7 +83,7 @@ public class MyCharactersController implements Initializable {
         if (selectedName != null) {
             Integer characterId = nameToIdMap.get(selectedName);
             Characters character = charactersDAO.findById(characterId);
-            Session.setCharacters(character);
+            Session.setCurrentCharacter(character);
             try {
                 openCharacterDetailPage();
             } catch (IOException e) {
@@ -107,12 +111,18 @@ public class MyCharactersController implements Initializable {
         });
     }
 
-    private void loadCharactersFromDatabase() {
+    public void loadCharactersFromDatabase() {
         characterList.clear();
         nameToIdMap.clear();
         nameToClassMap.clear();
 
-        List<Characters> myCharacters = charactersDAO.findByUserId(Session.getUserId());
+        // Debug: verifica l'ID utente
+        System.out.println("Caricamento personaggi per user ID: " + Session.getUserId());
+
+        List<Characters> myCharacters = charactersDAO.findByUserId(Session.getUserId().toString());
+
+        // Debug: verifica i personaggi trovati
+        System.out.println("Personaggi trovati: " + myCharacters.size());
 
         for(Characters character : myCharacters) {
             nameToIdMap.put(character.getName(), character.getId());

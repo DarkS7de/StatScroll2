@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Date;
 
 public class LoginPageController {
 
@@ -24,46 +23,49 @@ public class LoginPageController {
 
     @FXML
     private void onLogin(ActionEvent event) {
-        ErrorHandler.resetErrorLabel(errorLabel);
-
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            ErrorHandler.showError(errorLabel, "Inserisci username e password.");
+            ErrorHandler.showError(errorLabel, "Inserisci username e password");
             return;
         }
 
-        try {
-            if (usersDAO.login(username, password)) {
-                Session.setUserId(username);
-                ErrorHandler.showSuccess(errorLabel, "Login riuscito!");
+        UsersDAO usersDAO = new UsersDAO();
+        Users user = usersDAO.login(username, password);
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } else {
-                ErrorHandler.showError(errorLabel, "Credenziali non valide.");
+        if (user != null) {
+            Session.loginUser(user.getId(), user.getUsername(), user.isAdmin());
+            ErrorHandler.showSuccess(errorLabel, "Login riuscito!");
+            try {
+                navigateToMenu();
+            } catch (IOException e) {
+                ErrorHandler.showError(errorLabel, "Errore nel caricamento del menu.");
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            ErrorHandler.showErrorDialog("Errore", "Errore durante il login",
-                    "Si è verificato un errore durante l'accesso. Riprovare.");
-            e.printStackTrace();
+        } else {
+            ErrorHandler.showError(errorLabel, "Credenziali non valide");
         }
     }
+
+    private void navigateToMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) usernameField.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
     @FXML
     private void onRegister(ActionEvent event) {
         try {
-            // Carica la scena di registrazione
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/register.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
+            ErrorHandler.showError(errorLabel, "Errore nel caricamento della pagina di registrazione.");
             e.printStackTrace();
-            errorLabel.setText("Errore nel caricamento della pagina di registrazione.");
         }
     }
 }

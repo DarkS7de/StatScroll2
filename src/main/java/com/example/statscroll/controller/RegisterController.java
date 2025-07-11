@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import com.example.statscroll.dao.UsersDAO;
 import com.example.statscroll.model.Users;
 import javafx.util.Duration;
-
 import java.util.Date;
 import java.io.IOException;
 
@@ -29,26 +28,18 @@ public class RegisterController {
 
     @FXML
     private void handleBack(ActionEvent event) {
-        loadScene(event, "/fxml/login.fxml");
-    }
-
-    private void loadScene(ActionEvent event, String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            ErrorHandler.showErrorDialog("Error", "Navigation error",
-                    "Cannot load the requested page.");
-            e.printStackTrace();
+            ErrorHandler.showErrorDialog("Error", "Navigation error", "Cannot load login page.");
         }
     }
 
     @FXML
     private void onRegister(ActionEvent event) {
-        // Resetta eventuali errori precedenti
         ErrorHandler.resetErrorLabel(errorLabel);
 
         String email = emailField.getText().trim();
@@ -56,7 +47,7 @@ public class RegisterController {
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        // Validazione input
+        // Basic validation
         if (email.isEmpty() || username.isEmpty() || password.isEmpty()) {
             ErrorHandler.showError(errorLabel, "Compila tutti i campi.");
             return;
@@ -78,17 +69,17 @@ public class RegisterController {
                 return;
             }
 
-            Users user = new Users(username, password, email, new Date());
+            Users user = new Users(username, password, email);
+            user.setCreatedAt(new Date());
             usersDAO.save(user);
 
-            ErrorHandler.showSuccess(errorLabel, "Registrazione completata con successo!");
+            ErrorHandler.showSuccess(errorLabel, "Registrazione completata!");
 
-            // Reindirizzamento alla pagina di login dopo 1 secondo
+            // Redirect to login after delay
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-                    Parent root = loader.load();
+                    Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
                     Stage stage = (Stage) emailField.getScene().getWindow();
                     stage.setScene(new Scene(root));
                     stage.show();
@@ -100,8 +91,8 @@ public class RegisterController {
             pause.play();
 
         } catch (Exception e) {
-            ErrorHandler.showErrorDialog("Errore Grave", "Errore durante la registrazione",
-                    "Si è verificato un errore imprevisto. Riprovare più tardi.");
+            ErrorHandler.showErrorDialog("Errore", "Errore di registrazione",
+                    "Si è verificato un errore imprevisto.");
             e.printStackTrace();
         }
     }

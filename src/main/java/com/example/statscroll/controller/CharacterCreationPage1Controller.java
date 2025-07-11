@@ -80,6 +80,21 @@ public class CharacterCreationPage1Controller {
         textField.setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
     }
 
+    public void setCharacter(Characters character) {
+        this.character = character;
+        // Aggiorna i campi con i valori del personaggio se necessario
+        nameField.setText(character.getName());
+        classChoiceBox.setValue(character.getChar_class());
+        raceChoiceBox.setValue(character.getRace());
+        levelSpinner.getValueFactory().setValue(character.getLevel());
+        ageField.setText(character.getAge());
+        heightField.setText(character.getHeight());
+        weightField.setText(character.getWeight());
+        eyesField.setText(character.getEyes());
+        hairField.setText(character.getHair());
+        skinField.setText(character.getSkin());
+    }
+
     @FXML
     private void handleNextClick() {
         // Validazione dei campi obbligatori
@@ -116,8 +131,10 @@ public class CharacterCreationPage1Controller {
             }
 
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
+            // Crea il controller manualmente passando il character
             CharacterCreationPage2Controller page2Controller = new CharacterCreationPage2Controller(character);
-            loader.setController(page2Controller);  // Imposta il controller qui
+            loader.setController(page2Controller);
+
             Parent root = loader.load();
 
             Stage stage = (Stage) nextButton.getScene().getWindow();

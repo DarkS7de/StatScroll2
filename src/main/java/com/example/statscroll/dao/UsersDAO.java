@@ -2,25 +2,29 @@ package com.example.statscroll.dao;
 
 import com.example.statscroll.model.Users;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UsersDAO {
-    private final String url = "jdbc:h2:./statScrolldb";
-    private final String user = "sa";
-    private final String password = "";
+    private final String DB_URL = "jdbc:h2:./statScrolldb";
+    private final String DB_USER = "sa";
+    private final String DB_PASSWORD = "";
 
     public UsersDAO() {
-        initializeDatabase();
+        createTableIfNotExists();
+        verifyTableStructure();
     }
 
-    private void initializeDatabase() {
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+    }
+
+    private void createTableIfNotExists() {
         String sql = """
             CREATE TABLE IF NOT EXISTS USERS (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(50) UNIQUE NOT NULL,
                 password VARCHAR(100) NOT NULL,
                 email VARCHAR(100) UNIQUE NOT NULL,
+                is_admin BOOLEAN DEFAULT FALSE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             """;
@@ -29,149 +33,117 @@ public class UsersDAO {
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
-            handleSQLException("Errore durante l'inizializzazione del database", e);
+            System.err.println("Errore creazione tabella: " + e.getMessage());
         }
     }
 
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+    private void verifyTableStructure() {
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT is_admin FROM USERS LIMIT 1")) {
+            // Verifica riuscita, la colonna esiste
+        } catch (SQLException e) {
+            try (Statement stmt = getConnection().createStatement()) {
+                stmt.execute("DROP TABLE IF EXISTS USERS");
+                createTableIfNotExists();
+            } catch (SQLException ex) {
+                System.err.println("Errore ricreazione tabella: " + ex.getMessage());
+            }
+        }
     }
 
-    public void save(Users user) {
-        String sql = "INSERT INTO USERS (username, password, email, created_at) VALUES (?, ?, ?, ?)";
+    public boolean register(Users user) {
+        String sql = "INSERT INTO USERS (username, password, email) VALUES (?, ?, ?)";
 
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getUsername());
             ps.setString(2, hashPassword(user.getPassword()));
             ps.setString(3, user.getEmail());
-            ps.setTimestamp(4, new Timestamp(user.getCreated_at().getTime()));
 
-            int affectedRows = ps.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new SQLException("Creazione utente fallita, nessuna riga modificata.");
-            }
-
-            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    user.setId(generatedKeys.getInt(1));
-                } else {
-                    throw new SQLException("Creazione utente fallita, nessun ID ottenuto.");
-                }
-            }
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            handleSQLException("Errore durante il salvataggio dell'utente", e);
+            System.err.println("Errore registrazione: " + e.getMessage());
+            return false;
         }
     }
 
-    public List<Users> findAll() {
-        List<Users> users = new ArrayList<>();
-        String sql = "SELECT * FROM USERS ORDER BY username";
+    public Users login(String username, String password) {
+        String sql = "SELECT id, username, password, is_admin FROM USERS WHERE username = ?";
 
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                users.add(mapResultSetToUser(rs));
-            }
-        } catch (SQLException e) {
-            handleSQLException("Errore durante il recupero degli utenti", e);
-        }
-        return users;
-    }
+            ps.setString(1, username);
 
-    public boolean login(String username, String password) {
-        String sql = "SELECT password FROM USERS WHERE username = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, username);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String storedHash = rs.getString("password");
-                    return verifyPassword(password, storedHash);
+                    if (verifyPassword(password, storedHash)) {
+                        Users user = new Users();
+                        user.setId(rs.getInt("id"));
+                        user.setUsername(rs.getString("username"));
+                        user.setAdmin(rs.getBoolean("is_admin"));
+                        return user;
+                    }
                 }
             }
         } catch (SQLException e) {
-            handleSQLException("Errore durante il login", e);
+            System.err.println("Errore login: " + e.getMessage());
         }
-        return false;
+        return null;
     }
 
-    public boolean emailExists(String email) {
-        return checkFieldExists("email", email);
+    public void save(Users user) {
+        try {
+            String sql = "INSERT INTO USERS (username, password, email, is_admin) VALUES (?, ?, ?, ?)";
+            try (Connection conn = getConnection();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, user.getUsername());
+                ps.setString(2, hashPassword(user.getPassword()));
+                ps.setString(3, user.getEmail());
+                ps.setBoolean(4, user.isAdmin());
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Errore durante il salvataggio dell'utente", e);
+        }
     }
 
     public boolean usernameExists(String username) {
-        return checkFieldExists("username", username);
+        return checkExists("username", username);
     }
 
-    private boolean checkFieldExists(String field, String value) {
-        String sql = String.format("SELECT COUNT(*) FROM USERS WHERE %s = ?", field);
+    public boolean emailExists(String email) {
+        return checkExists("email", email);
+    }
+
+    private boolean checkExists(String field, String value) {
+        String sql = "SELECT COUNT(*) FROM USERS WHERE " + field + " = ?";
 
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, value);
+            ps.setString(1, value);
 
-            try (ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
                 }
             }
         } catch (SQLException e) {
-            handleSQLException("Errore durante la verifica dell'esistenza del campo " + field, e);
+            System.err.println("Errore verifica esistenza: " + e.getMessage());
         }
         return false;
     }
 
-    private Users mapResultSetToUser(ResultSet rs) throws SQLException {
-        return new Users(
-                rs.getInt("id"),
-                rs.getString("username"),
-                "", // Non restituiamo la password per sicurezza
-                rs.getString("email"),
-                rs.getTimestamp("created_at")
-        );
+    private String hashPassword(String password) {
+        return Integer.toString(password.hashCode());
     }
 
-    private String hashPassword(String plainPassword) {
-        // Implementazione base - in produzione usare BCrypt
-        return Integer.toString(plainPassword.hashCode());
-    }
-
-    private boolean verifyPassword(String inputPassword, String storedHash) {
-        return hashPassword(inputPassword).equals(storedHash);
-    }
-
-    private void handleSQLException(String message, SQLException e) {
-        // Qui potresti loggare l'errore o lanciare un'eccezione personalizzata
-        System.err.println(message + ": " + e.getMessage());
-        e.printStackTrace();
-    }
-
-    // Metodo aggiuntivo per cercare utente per ID
-    public Users findById(int id) {
-        String sql = "SELECT * FROM USERS WHERE id = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToUser(rs);
-                }
-            }
-        } catch (SQLException e) {
-            handleSQLException("Errore durante la ricerca dell'utente per ID", e);
-        }
-        return null;
+    private boolean verifyPassword(String input, String storedHash) {
+        return hashPassword(input).equals(storedHash);
     }
 }

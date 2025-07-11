@@ -1,5 +1,6 @@
 package com.example.statscroll.controller;
 
+import com.example.statscroll.dao.CharactersDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +14,7 @@ import java.net.URL;
 
 public class CharacterCreationPage2Controller {
 
+    private CharactersDAO charactersDAO = new CharactersDAO();
     private Characters character;
 
     // Componenti FXML
@@ -42,14 +44,9 @@ public class CharacterCreationPage2Controller {
     @FXML
     public void initialize() {
         try {
-            // Verifica che tutti i componenti siano stati iniettati
-            if (strSpinner == null || dexSpinner == null || conSpinner == null ||
-                    intelSpinner == null || wisSpinner == null || chaSpinner == null ||
-                    profBonSpinner == null || initiativeSpinner == null || maxHPSpinner == null ||
-                    hitDiceField == null || inspirationCheckBox == null || speedSpinner == null ||
-                    portraitUrlField == null || inventoryField == null || previousButton == null ||
-                    confirmButton == null || pdfExportButton == null || wikiButton == null) {
-                throw new IllegalStateException("Uno o più componenti FXML non sono stati iniettati correttamente");
+            // Verifica che il character esista
+            if (character == null) {
+                character = new Characters();
             }
 
             // Inizializzazione degli spinner
@@ -98,21 +95,20 @@ public class CharacterCreationPage2Controller {
     }
 
     private void handlePreviousClick() {
-        try {
-            URL fxmlUrl = getClass().getResource("/fxml/characterCreationPage1.fxml");
-            if (fxmlUrl == null) {
-                throw new IOException("File FXML non trovato");
-            }
+        saveCharacterData(); // Salva i dati prima di tornare indietro
 
-            FXMLLoader loader = new FXMLLoader(fxmlUrl);
-            CharacterCreationPage1Controller page1Controller = new CharacterCreationPage1Controller();
-            loader.setController(page1Controller);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/characterCreationPage1.fxml"));
             Parent root = loader.load();
+
+            // Passa i dati alla pagina 1
+            CharacterCreationPage1Controller page1Controller = loader.getController();
+            page1Controller.setCharacter(character);
 
             Stage stage = (Stage) previousButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (Exception e) {
+        } catch (IOException e) {
             showAlert("Errore", "Impossibile tornare alla pagina precedente", e.getMessage());
         }
     }
@@ -123,7 +119,33 @@ public class CharacterCreationPage2Controller {
         }
 
         saveCharacterData();
-        navigateToMenu();
+
+        try {
+            if (character.getId() == 0) {  // Se è un nuovo personaggio
+                character.setUser_id(Session.getUserId().toString());
+                charactersDAO.save(character);
+                showAlert("Successo", "Personaggio creato", "Il personaggio è stato salvato con successo!");
+            } else {
+                charactersDAO.update(character);
+                showAlert("Successo", "Personaggio aggiornato", "Il personaggio è stato aggiornato con successo!");
+            }
+
+            // Chiudi la finestra corrente e torna a MyCharacters
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/myCharacters.fxml"));
+            Parent root = loader.load();
+
+            // Ottieni il controller e forza il ricaricamento
+            MyCharactersController controller = loader.getController();
+            controller.loadCharactersFromDatabase();
+
+            Stage stage = (Stage) confirmButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            showAlert("Errore", "Salvataggio fallito", "Impossibile salvare il personaggio: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void handlePDFExport() {
@@ -155,18 +177,19 @@ public class CharacterCreationPage2Controller {
         character.setSpeed(speedSpinner.getValue());
         character.setPortrait_url(portraitUrlField.getText());
         character.setInventory(inventoryField.getText());
-
-        System.out.println("Dati personaggio salvati: " + character);
     }
 
     private void navigateToMenu() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/menu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/menuPage.fxml"));
+            Parent root = loader.load();
+
             Stage stage = (Stage) confirmButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            showAlert("Errore", "Impossibile tornare al menu", e.getMessage());
+            showAlert("Errore", "Impossibile tornare al menu", "Errore durante il caricamento del menu: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
