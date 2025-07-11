@@ -20,22 +20,25 @@ public class MenuPageController {
     }
 
     @FXML
-    private void handleCreateCharacter(ActionEvent event) {
+    private void handleCreateCharacter(ActionEvent event) {  // Aggiunto ActionEvent come parametro
         try {
-            // Modifica il percorso per puntare alla posizione corretta
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/statscroll/view/characterCreationPage1.fxml"));
+            // Carica il file FXML dalla cartella resources
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/characterCreationPage1.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            // Ottiene la finestra corrente
+            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Loading Error", "Failed to load character creation",
-                    "Path used: /com/example/statscroll/view/characterCreationPage1.fxml\n" +
-                            "Error: " + e.getMessage());
+            showAlert("Error", "Failed to load character creation page", e.getMessage());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            showAlert("Error", "Resource not found", "Character creation FXML file not found");
         }
     }
+
     @FXML
     private void handleBack(ActionEvent event) {
         loadScene(event, "/fxml/login.fxml");

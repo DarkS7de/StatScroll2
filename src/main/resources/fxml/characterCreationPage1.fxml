@@ -7,55 +7,51 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.HBox?>
-<AnchorPane stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.CharacterCreationPage1Controller">
+<AnchorPane prefHeight="494.0" prefWidth="589.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.statscroll.controller.CharacterCreationPage1Controller">
    <children>
-      <VBox prefHeight="342.0" prefWidth="472.0" spacing="10" style="-fx-padding: 20;">
-         <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Creazione Personaggio - Pagina 1/2" />
-         <Separator />
+      <Label layoutX="20.0" layoutY="20.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Creazione Personaggio - Pagina 1/2" AnchorPane.leftAnchor="20.0">
+         <font>
+            <Font name="Times New Roman Bold" size="14.0" />
+         </font>
+      </Label>
+      <Separator layoutX="20.0" layoutY="60.0" />
 
-         <!-- Sezione Informazioni Base -->
-         <Label style="-fx-font-weight: bold;" text="Informazioni Base" />
+      <!-- Sezione Informazioni Base -->
+      <Label layoutX="20.0" layoutY="78.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Informazioni Base" AnchorPane.leftAnchor="20.0" />
+      <Label layoutX="20.0" layoutY="110.0" style="-fx-font-weight: bold;" text="Nome:" AnchorPane.leftAnchor="20.0" />
+      <TextField fx:id="nameField" layoutX="17.0" layoutY="127.0" prefHeight="41.0" prefWidth="200.0" AnchorPane.leftAnchor="17.0" />
 
-         <Label text="Nome:" />
-         <TextField fx:id="nameField" />
+      <Label layoutX="20.0" layoutY="178.0" style="-fx-font-weight: bold;" text="Classe:" AnchorPane.leftAnchor="20.0" />
+      <ChoiceBox fx:id="classChoiceBox" layoutX="20.0" layoutY="200.0" prefHeight="26.0" prefWidth="152.0" styleClass="password-field" AnchorPane.leftAnchor="20.0" />
 
-         <Label text="Classe:" />
-         <ChoiceBox fx:id="classChoiceBox" />
+      <Label layoutX="185.0" layoutY="178.0" style="-fx-font-weight: bold;" text="Razza:" />
+      <ChoiceBox fx:id="raceChoiceBox" layoutX="185.0" layoutY="200.0" prefHeight="32.0" prefWidth="152.0" styleClass="password-field" />
 
-         <Label text="Razza:" />
-         <ChoiceBox fx:id="raceChoiceBox" />
+      <Label layoutX="295.0" layoutY="110.0" style="-fx-font-weight: bold;" text="Livello:" />
+      <Spinner fx:id="levelSpinner" layoutX="295.0" layoutY="127.0" prefHeight="26.0" prefWidth="99.0" />
 
-         <Label text="Livello:" />
-         <Spinner fx:id="levelSpinner" />
+      <!-- Sezione Caratteristiche Fisiche -->
+      <Label layoutX="20.0" layoutY="259.0" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Caratteristiche Fisiche" />
+      <Label layoutX="19.0" layoutY="290.0" style="-fx-font-weight: bold;" text="Età:" />
+      <TextField fx:id="ageField" layoutX="17.0" layoutY="307.0" prefHeight="41.0" prefWidth="81.0" />
 
-         <!-- Sezione Caratteristiche Fisiche -->
-         <Label style="-fx-font-weight: bold;" text="Caratteristiche Fisiche" />
+      <Label layoutX="132.0" layoutY="290.0" style="-fx-font-weight: bold;" text="Altezza (cm):" />
+      <TextField fx:id="heightField" layoutX="132.0" layoutY="307.0" prefHeight="41.0" prefWidth="81.0" />
 
-         <Label text="Età:" />
-         <TextField fx:id="ageField" />
+      <Label layoutX="265.0" layoutY="290.0" style="-fx-font-weight: bold;" text="Peso (kg):" />
+      <TextField fx:id="weightField" layoutX="261.0" layoutY="307.0" prefHeight="41.0" prefWidth="81.0" />
 
-         <Label text="Altezza (cm):" />
-         <TextField fx:id="heightField" />
+      <Label layoutX="17.0" layoutY="370.0" style="-fx-font-weight: bold;" text="Occhi:" />
+      <TextField fx:id="eyesField" layoutX="17.0" layoutY="387.0" prefHeight="41.0" prefWidth="152.0" />
 
-         <Label text="Peso (kg):" />
-         <TextField fx:id="weightField" />
+      <Label layoutX="190.0" layoutY="370.0" style="-fx-font-weight: bold;" text="Capelli:" />
+      <TextField fx:id="hairField" layoutX="185.0" layoutY="387.0" prefHeight="41.0" prefWidth="152.0" />
 
-         <Label text="Occhi:" />
-         <TextField fx:id="eyesField" />
-
-         <Label text="Capelli:" />
-         <TextField fx:id="hairField" />
-
-         <Label text="Pelle:" />
-         <TextField fx:id="skinField" />
-
-         <HBox spacing="10">
-            <Button fx:id="wikiButton" text="Wiki" />
-            <Button fx:id="nextButton" onAction="#handleNextClick" prefHeight="38.0" prefWidth="84.0" styleClass="button-signin" text="Avanti" />
-         </HBox>
-      </VBox>
+      <Label layoutX="351.0" layoutY="370.0" style="-fx-font-weight: bold;" text="Pelle:" />
+      <TextField fx:id="skinField" layoutX="351.0" layoutY="387.0" prefHeight="41.0" prefWidth="152.0" />
+      <Button fx:id="wikiButton" layoutX="473.0" layoutY="206.0" prefHeight="38.0" prefWidth="60.0" styleClass="button-signin" text="Wiki" />
+      <Button fx:id="nextButton" layoutX="491.0" layoutY="438.0" onAction="#handleNextClick" prefHeight="38.0" prefWidth="84.0" styleClass="button-signin" stylesheets="@../styles.css" text="Avanti" AnchorPane.rightAnchor="14.0" />
    </children>
 </AnchorPane>

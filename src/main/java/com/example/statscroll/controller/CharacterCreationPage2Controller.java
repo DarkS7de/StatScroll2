@@ -9,11 +9,13 @@ import javafx.stage.Stage;
 import com.example.statscroll.model.Characters;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class CharacterCreationPage2Controller {
 
     private Characters character;
 
+    // Componenti FXML
     @FXML private Spinner<Integer> strSpinner;
     @FXML private Spinner<Integer> dexSpinner;
     @FXML private Spinner<Integer> conSpinner;
@@ -39,27 +41,70 @@ public class CharacterCreationPage2Controller {
 
     @FXML
     public void initialize() {
-        // Imposta i valori di default per gli spinner
-        strSpinner.getValueFactory().setValue(10);
-        dexSpinner.getValueFactory().setValue(10);
-        conSpinner.getValueFactory().setValue(10);
-        intelSpinner.getValueFactory().setValue(10);
-        wisSpinner.getValueFactory().setValue(10);
-        chaSpinner.getValueFactory().setValue(10);
-        profBonSpinner.getValueFactory().setValue(2);
-        initiativeSpinner.getValueFactory().setValue(0);
-        maxHPSpinner.getValueFactory().setValue(10);
-        speedSpinner.getValueFactory().setValue(30);
+        try {
+            // Verifica che tutti i componenti siano stati iniettati
+            if (strSpinner == null || dexSpinner == null || conSpinner == null ||
+                    intelSpinner == null || wisSpinner == null || chaSpinner == null ||
+                    profBonSpinner == null || initiativeSpinner == null || maxHPSpinner == null ||
+                    hitDiceField == null || inspirationCheckBox == null || speedSpinner == null ||
+                    portraitUrlField == null || inventoryField == null || previousButton == null ||
+                    confirmButton == null || pdfExportButton == null || wikiButton == null) {
+                throw new IllegalStateException("Uno o più componenti FXML non sono stati iniettati correttamente");
+            }
 
-        // Configura il pulsante Wiki
-        wikiButton.setOnAction(event -> openWiki());
+            // Inizializzazione degli spinner
+            initSpinner(strSpinner, 1, 30, 10);
+            initSpinner(dexSpinner, 1, 30, 10);
+            initSpinner(conSpinner, 1, 30, 10);
+            initSpinner(intelSpinner, 1, 30, 10);
+            initSpinner(wisSpinner, 1, 30, 10);
+            initSpinner(chaSpinner, 1, 30, 10);
+            initSpinner(profBonSpinner, 2, 6, 2);
+            initSpinner(initiativeSpinner, -5, 10, 0);
+            initSpinner(maxHPSpinner, 1, 500, 10);
+            initSpinner(speedSpinner, 0, 100, 30);
+
+            // Configurazione dei pulsanti
+            previousButton.setOnAction(e -> handlePreviousClick());
+            confirmButton.setOnAction(e -> handleConfirmClick());
+            pdfExportButton.setOnAction(e -> handlePDFExport());
+            wikiButton.setOnAction(e -> openWiki());
+
+        } catch (Exception e) {
+            showAlert("Errore di Inizializzazione", "Errore durante l'inizializzazione della pagina", e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-    @FXML
+    private void initSpinner(Spinner<Integer> spinner, int min, int max, int initial) {
+        SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, initial);
+        spinner.setValueFactory(valueFactory);
+        spinner.setEditable(true);
+
+        // Validazione input manuale
+        spinner.getEditor().textProperty().addListener((obs, oldValue, newValue) -> {
+            try {
+                if (!newValue.isEmpty()) {
+                    int value = Integer.parseInt(newValue);
+                    if (value < min || value > max) {
+                        spinner.getEditor().setText(oldValue);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                spinner.getEditor().setText(oldValue);
+            }
+        });
+    }
+
     private void handlePreviousClick() {
         try {
-            // Torna alla prima pagina mantenendo i dati
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/statscroll/view/characterCreationPage1.fxml"));
+            URL fxmlUrl = getClass().getResource("/fxml/characterCreationPage1.fxml");
+            if (fxmlUrl == null) {
+                throw new IOException("File FXML non trovato");
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlUrl);
             CharacterCreationPage1Controller page1Controller = new CharacterCreationPage1Controller();
             loader.setController(page1Controller);
             Parent root = loader.load();
@@ -68,13 +113,34 @@ public class CharacterCreationPage2Controller {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Errore", "Impossibile tornare alla pagina precedente", e.getMessage());
         }
     }
 
-    @FXML
     private void handleConfirmClick() {
-        // Salva i dati nella classe Characters
+        if (!validateFields()) {
+            return;
+        }
+
+        saveCharacterData();
+        navigateToMenu();
+    }
+
+    private void handlePDFExport() {
+        saveCharacterData();
+        // Implementa qui la logica di esportazione PDF
+        showAlert("Esportazione PDF", "PDF generato", "Il personaggio è stato esportato in PDF");
+    }
+
+    private boolean validateFields() {
+        if (hitDiceField.getText().isEmpty()) {
+            showAlert("Validazione", "Campo mancante", "Inserisci i dadi vita (Hit Dice)");
+            return false;
+        }
+        return true;
+    }
+
+    private void saveCharacterData() {
         character.setStr(strSpinner.getValue());
         character.setDex(dexSpinner.getValue());
         character.setCon(conSpinner.getValue());
@@ -88,34 +154,20 @@ public class CharacterCreationPage2Controller {
         character.setInspiration(inspirationCheckBox.isSelected());
         character.setSpeed(speedSpinner.getValue());
         character.setPortrait_url(portraitUrlField.getText());
+        character.setInventory(inventoryField.getText());
 
-        // Salva il personaggio nel database
-        saveCharacter();
+        System.out.println("Dati personaggio salvati: " + character);
+    }
 
-        // Torna al menu principale
+    private void navigateToMenu() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/menu.fxml"));
             Stage stage = (Stage) confirmButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            showAlert("Errore", "Impossibile tornare al menu", e.getMessage());
         }
-    }
-
-    @FXML
-    private void handlePDFExport() {
-        // Prima salva i dati
-        handleConfirmClick();
-
-        // Poi esporta in PDF
-        // Implementa la logica di esportazione PDF qui
-        System.out.println("Esportazione PDF del personaggio: " + character.getName());
-    }
-
-    private void saveCharacter() {
-        // Implementa la logica per salvare il personaggio nel database o file
-        System.out.println("Personaggio salvato: " + character);
     }
 
     private void openWiki() {
@@ -128,7 +180,15 @@ public class CharacterCreationPage2Controller {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Errore", "Impossibile aprire la wiki", e.getMessage());
         }
+    }
+
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

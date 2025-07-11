@@ -11,7 +11,6 @@ public class Characters {
     private String race;
     private int initiative;
     private int speed;
-    private int exp;
     private int str;
     private int dex;
     private int con;
@@ -21,63 +20,33 @@ public class Characters {
     private boolean inspiration;
     private int profbonus;
     private int maxhp;
-    private int currenthp;
-    private int temphp;
-    private String totalhitdice;
     private String hitdice;
-    private int spellsavedc;
-    private int spellattackbonus;
     private String age;
     private String eyes;
     private String hair;
     private String skin;
     private String height;
     private String weight;
+    private String inventory;
     private String portrait_url;
 
     // Costruttori
-    public Characters() {}
-
-    public Characters(int id, String user_id, String name, String char_class, int level, String race, int initiative, int speed, int exp, int str,
-                      int dex, int con, int intel, int wis, int cha, boolean inspiration,
-                      int profbonus, int maxhp, int currenthp, int temphp, String totalhitdice,
-                      String hitdice, int spellsavedc, int spellattackbonus, String age,
-                      String eyes, String hair, String skin, String height, String weight,
-                      String portrait_url) {
-        this.id = id;
-        this.user_id = user_id;
-        this.name = name;
-        this.char_class = char_class;
-        this.level = level;
-        this.race = race;
-        this.initiative = initiative;
-        this.speed = speed;
-        this.exp = exp;
-        this.str = str;
-        this.dex = dex;
-        this.con = con;
-        this.intel = intel;
-        this.wis = wis;
-        this.cha = cha;
-        this.inspiration = inspiration;
-        this.profbonus = profbonus;
-        this.maxhp = maxhp;
-        this.currenthp = currenthp;
-        this.temphp = temphp;
-        this.totalhitdice = totalhitdice;
-        this.hitdice = hitdice;
-        this.spellsavedc = spellsavedc;
-        this.spellattackbonus = spellattackbonus;
-        this.age = age;
-        this.eyes = eyes;
-        this.hair = hair;
-        this.skin = skin;
-        this.height = height;
-        this.weight = weight;
-        this.portrait_url = portrait_url;
+    public Characters() {
+        // Valori di default
+        this.level = 1;
+        this.profbonus = 2;
+        this.speed = 30;
     }
 
-    // Getter e Setter completi
+    // Costruttore minimale per creazione base
+    public Characters(String name, String char_class, String race) {
+        this();
+        this.name = name;
+        this.char_class = char_class;
+        this.race = race;
+    }
+
+    // Getter e Setter
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -91,7 +60,11 @@ public class Characters {
     public void setChar_class(String char_class) { this.char_class = char_class; }
 
     public int getLevel() { return level; }
-    public void setLevel(int level) { this.level = level; }
+    public void setLevel(int level) {
+        this.level = level;
+        // Aggiorna il bonus di competenza in base al livello
+        this.profbonus = calculateProficiencyBonus();
+    }
 
     public String getRace() { return race; }
     public void setRace(String race) { this.race = race; }
@@ -101,9 +74,6 @@ public class Characters {
 
     public int getSpeed() { return speed; }
     public void setSpeed(int speed) { this.speed = speed; }
-
-    public int getExp() { return exp; }
-    public void setExp(int exp) { this.exp = exp; }
 
     public int getStr() { return str; }
     public void setStr(int str) { this.str = str; }
@@ -132,23 +102,8 @@ public class Characters {
     public int getMaxhp() { return maxhp; }
     public void setMaxhp(int maxhp) { this.maxhp = maxhp; }
 
-    public int getCurrenthp() { return currenthp; }
-    public void setCurrenthp(int currenthp) { this.currenthp = currenthp; }
-
-    public int getTemphp() { return temphp; }
-    public void setTemphp(int temphp) { this.temphp = temphp; }
-
-    public String getTotalhitdice() { return totalhitdice; }
-    public void setTotalhitdice(String totalhitdice) { this.totalhitdice = totalhitdice; }
-
     public String getHitdice() { return hitdice; }
     public void setHitdice(String hitdice) { this.hitdice = hitdice; }
-
-    public int getSpellsavedc() { return spellsavedc; }
-    public void setSpellsavedc(int spellsavedc) { this.spellsavedc = spellsavedc; }
-
-    public int getSpellattackbonus() { return spellattackbonus; }
-    public void setSpellattackbonus(int spellattackbonus) { this.spellattackbonus = spellattackbonus; }
 
     public String getAge() { return age; }
     public void setAge(String age) { this.age = age; }
@@ -168,8 +123,20 @@ public class Characters {
     public String getWeight() { return weight; }
     public void setWeight(String weight) { this.weight = weight; }
 
+    public String getInventory() { return inventory; }
+    public void setInventory(String inventory) { this.inventory = inventory; }
+
     public String getPortrait_url() { return portrait_url; }
     public void setPortrait_url(String portrait_url) { this.portrait_url = portrait_url; }
+
+    // Metodi di utilità
+    private int calculateProficiencyBonus() {
+        return 2 + (level - 1) / 4;
+    }
+
+    public int getAbilityModifier(int abilityScore) {
+        return (abilityScore - 10) / 2;
+    }
 
     // Metodi sovrascritti
     @Override
@@ -194,10 +161,11 @@ public class Characters {
                 ", name='" + name + '\'' +
                 ", class='" + char_class + '\'' +
                 ", level=" + level +
+                ", race='" + race + '\'' +
                 '}';
     }
 
     public String toListViewString() {
-        return String.format("%s (Lvl %d %s)", name, level, char_class);
+        return String.format("%s (Lvl %d %s %s)", name, level, race, char_class);
     }
 }
