@@ -1,79 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="765.0" prefWidth="518.0" stylesheets="@../styles.css"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="698.0" prefWidth="523.0" stylesheets="@../styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- Area fissa superiore -->
-        <Label layoutX="16.0" layoutY="14.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Creazione Personaggio - Pagina 2/2" />
-        <Separator layoutX="2.0" layoutY="45.0" prefWidth="514.0" />
-        <Button fx:id="wikiButton" layoutX="425.0" layoutY="14.0" text="Wiki" />
+        <Label layoutX="16.0" layoutY="14.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Character Creation - Page 2/2" />
+        <Separator layoutX="2.0" layoutY="48.0" prefHeight="25.0" prefWidth="514.0" />
 
         <!-- ScrollPane con contenuto principale -->
-        <ScrollPane layoutX="0.0" layoutY="60.0" prefHeight="650.0" prefWidth="518.0" vbarPolicy="AS_NEEDED">
+        <ScrollPane layoutX="7.0" layoutY="65.0" prefHeight="570.0" prefWidth="518.0" vbarPolicy="AS_NEEDED">
             <content>
-                <AnchorPane prefHeight="1000.0" prefWidth="500.0">
+                <AnchorPane prefHeight="730.0" prefWidth="500.0" styleClass="list-cell">
                     <!-- Statistiche -->
-                    <Label layoutX="20.0" layoutY="10.0" style="-fx-font-weight: bold;" text="Statistiche" />
+                    <Label layoutX="20.0" layoutY="10.0" style="-fx-font-weight: bold;" text="Stats" />
 
                     <!-- Prima colonna -->
-                    <Label layoutX="20.0" layoutY="40.0" text="Forza (STR):" />
+                    <Label layoutX="20.0" layoutY="40.0" text="Strength (STR):" />
                     <Spinner fx:id="strSpinner" layoutX="20.0" layoutY="65.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="20.0" layoutY="120.0" text="Destrezza (DEX):" />
+                    <Label layoutX="20.0" layoutY="120.0" text="Dexterity (DEX):" />
                     <Spinner fx:id="dexSpinner" layoutX="20.0" layoutY="145.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="20.0" layoutY="200.0" text="Costituzione (CON):" />
+                    <Label layoutX="20.0" layoutY="200.0" text="Constitution (CON):" />
                     <Spinner fx:id="conSpinner" layoutX="20.0" layoutY="225.0" prefHeight="41.0" prefWidth="99.0" />
 
                     <!-- Seconda colonna -->
-                    <Label layoutX="200.0" layoutY="40.0" text="Intelligenza (INT):" />
+                    <Label layoutX="200.0" layoutY="40.0" text="Intelligence(INT):" />
                     <Spinner fx:id="intelSpinner" layoutX="200.0" layoutY="65.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="200.0" layoutY="120.0" text="Saggezza (WIS):" />
+                    <Label layoutX="200.0" layoutY="120.0" text="Wisdom (WIS):" />
                     <Spinner fx:id="wisSpinner" layoutX="200.0" layoutY="145.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="200.0" layoutY="200.0" text="Carisma (CHA):" />
+                    <Label layoutX="200.0" layoutY="200.0" text="Charisma (CHA):" />
                     <Spinner fx:id="chaSpinner" layoutX="200.0" layoutY="225.0" prefHeight="41.0" prefWidth="99.0" />
 
                     <!-- Altri campi -->
-                    <Label layoutX="20.0" layoutY="280.0" text="Bonus Competenza:" />
+                    <Label layoutX="20.0" layoutY="280.0" text="Proficiency Bonus:" />
                     <Spinner fx:id="profBonSpinner" layoutX="20.0" layoutY="305.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="200.0" layoutY="280.0" text="Iniziativa:" />
+                    <Label layoutX="200.0" layoutY="280.0" text="Initiative:" />
                     <Spinner fx:id="initiativeSpinner" layoutX="200.0" layoutY="305.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="20.0" layoutY="360.0" text="Punti Ferita Massimi:" />
+                    <Label layoutX="20.0" layoutY="360.0" text="Max Hit Points:" />
                     <Spinner fx:id="maxHPSpinner" layoutX="20.0" layoutY="385.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="200.0" layoutY="360.0" text="Dadi Vita (es. 3d8):" />
+                    <Label layoutX="200.0" layoutY="360.0" text="HIt Dice (es. 3d8):" />
                     <TextField fx:id="hitDiceField" layoutX="200.0" layoutY="385.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="20.0" layoutY="440.0" text="Ispirazione:" />
+                    <Label layoutX="20.0" layoutY="440.0" text="Inspiration:" />
                     <CheckBox fx:id="inspirationCheckBox" layoutX="20.0" layoutY="465.0" />
 
-                    <Label layoutX="20.0" layoutY="510.0" text="Velocità:" />
-                    <Spinner fx:id="speedSpinner" layoutX="20.0" layoutY="535.0" prefHeight="41.0" prefWidth="99.0" />
+                    <Label layoutX="202.0" layoutY="440.0" text="Speed:" />
+                    <Spinner fx:id="speedSpinner" layoutX="200.0" layoutY="463.0" prefHeight="41.0" prefWidth="99.0" />
 
-                    <Label layoutX="20.0" layoutY="580.0" text="URL Ritratto:" />
-                    <TextField fx:id="portraitUrlField" layoutX="20.0" layoutY="605.0" prefWidth="300.0" />
-
-                    <Label layoutX="20.0" layoutY="650.0" style="-fx-font-weight: bold;" text="Inventario" />
-                    <TextArea fx:id="inventoryField" layoutX="20.0" layoutY="675.0" prefHeight="150.0" prefWidth="450.0" />
+                    <Label layoutX="22.0" layoutY="530.0" style="-fx-font-weight: bold;" text="Inventory" />
+                    <TextArea fx:id="inventoryField" layoutX="25.0" layoutY="547.0" prefHeight="166.0" prefWidth="450.0" />
                 </AnchorPane>
             </content>
         </ScrollPane>
 
         <!-- Area fissa inferiore con pulsanti -->
-        <AnchorPane layoutX="0.0" layoutY="715.0" prefHeight="50.0" prefWidth="518.0" style="-fx-background-color: white;">
+        <AnchorPane layoutX="7.0" layoutY="635.0" prefHeight="50.0" prefWidth="518.0" styleClass="root" stylesheets="@../styles.css">
             <children>
-                <Button fx:id="previousButton" layoutX="15.0" layoutY="10.0" text="&lt;&lt; Indietro" />
-                <Button fx:id="pdfExportButton" layoutX="212.0" layoutY="10.0" text="Esporta PDF" />
-                <Button fx:id="confirmButton" layoutX="390.0" layoutY="10.0" text="Conferma" />
+                <Button fx:id="previousButton" layoutX="14.0" layoutY="6.0" prefHeight="38.0" prefWidth="95.0" styleClass="button-signin" stylesheets="@../styles.css" text="Back" />
+                <Button fx:id="confirmButton" layoutX="394.0" layoutY="6.0" prefHeight="38.0" prefWidth="87.0" styleClass="button-signin" text="Save" />
             </children>
         </AnchorPane>
+
+        <Button fx:id="wikiButton" layoutX="424.0" layoutY="8.0" prefHeight="26.0" prefWidth="87.0" styleClass="button-signin" text="Wiki" />
     </children>
 </AnchorPane>

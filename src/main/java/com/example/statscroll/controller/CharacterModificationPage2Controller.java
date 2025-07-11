@@ -85,23 +85,38 @@ public class CharacterModificationPage2Controller {
             inspirationCheckBox.setSelected(currentCharacter.isInspiration());
             speedSpinner.getValueFactory().setValue(currentCharacter.getSpeed());
             inventoryField.setText(currentCharacter.getInventory());
+            // Rimosso il riferimento a portrait_url
         }
     }
 
     private void savePage2Data() {
-        currentCharacter.setStr(strSpinner.getValue());
-        currentCharacter.setDex(dexSpinner.getValue());
-        currentCharacter.setCon(conSpinner.getValue());
-        currentCharacter.setIntel(intSpinner.getValue());
-        currentCharacter.setWis(wisSpinner.getValue());
-        currentCharacter.setCha(chaSpinner.getValue());
-        currentCharacter.setProfbonus(profBonSpinner.getValue());
-        currentCharacter.setInitiative(initiativeSpinner.getValue());
-        currentCharacter.setMaxhp(maxHPSpinner.getValue());
-        currentCharacter.setHitdice(hitDiceField.getText());
-        currentCharacter.setInspiration(inspirationCheckBox.isSelected());
-        currentCharacter.setSpeed(speedSpinner.getValue());
-        currentCharacter.setInventory(inventoryField.getText());
+        if (currentCharacter != null) {
+            currentCharacter.setStr(strSpinner.getValue());
+            currentCharacter.setDex(dexSpinner.getValue());
+            currentCharacter.setCon(conSpinner.getValue());
+            currentCharacter.setIntel(intSpinner.getValue());
+            currentCharacter.setWis(wisSpinner.getValue());
+            currentCharacter.setCha(chaSpinner.getValue());
+            currentCharacter.setProfbonus(profBonSpinner.getValue());
+            currentCharacter.setInitiative(initiativeSpinner.getValue());
+            currentCharacter.setMaxhp(maxHPSpinner.getValue());
+            currentCharacter.setHitdice(hitDiceField.getText().trim());
+            currentCharacter.setInspiration(inspirationCheckBox.isSelected());
+            currentCharacter.setSpeed(speedSpinner.getValue());
+            currentCharacter.setInventory(inventoryField.getText().trim());
+            // Rimosso il salvataggio di portrait_url
+
+            // Debug: stampa i valori per verifica
+            System.out.println("Valori salvati:");
+            System.out.println("STR: " + currentCharacter.getStr());
+            System.out.println("DEX: " + currentCharacter.getDex());
+            System.out.println("CON: " + currentCharacter.getCon());
+            System.out.println("INT: " + currentCharacter.getIntel());
+            System.out.println("WIS: " + currentCharacter.getWis());
+            System.out.println("CHA: " + currentCharacter.getCha());
+            System.out.println("HP: " + currentCharacter.getMaxhp());
+            System.out.println("Hit Dice: " + currentCharacter.getHitdice());
+        }
     }
 
     @FXML
@@ -123,6 +138,30 @@ public class CharacterModificationPage2Controller {
     }
 
     @FXML
+    private void openWiki() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/wikiPage.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Wiki Personaggi");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Errore nel caricamento della pagina","Errore", "Impossibile aprire la pagina Wiki");
+        }
+    }
+
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    @FXML
     private void handleSaveClick() {
         savePage2Data();
         CharactersDAO dao = new CharactersDAO();
@@ -137,7 +176,7 @@ public class CharacterModificationPage2Controller {
             Stage stage = (Stage) saveButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException ex) {  // Cambiato da 'e' a 'ex' per evitare conflitto
+        } catch (IOException ex) {
             showErrorAlert("Errore", "Impossibile tornare alla pagina dei personaggi: " + ex.getMessage());
             ex.printStackTrace();
         }

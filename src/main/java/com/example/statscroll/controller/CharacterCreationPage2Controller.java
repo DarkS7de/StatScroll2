@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import com.example.statscroll.model.Characters;
+import com.example.statscroll.util.ErrorHandler;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,11 +31,9 @@ public class CharacterCreationPage2Controller {
     @FXML private TextField hitDiceField;
     @FXML private CheckBox inspirationCheckBox;
     @FXML private Spinner<Integer> speedSpinner;
-    @FXML private TextField portraitUrlField;
     @FXML private TextArea inventoryField;
     @FXML private Button previousButton;
     @FXML private Button confirmButton;
-    @FXML private Button pdfExportButton;
     @FXML private Button wikiButton;
 
     public CharacterCreationPage2Controller(Characters character) {
@@ -64,7 +63,6 @@ public class CharacterCreationPage2Controller {
             // Configurazione dei pulsanti
             previousButton.setOnAction(e -> handlePreviousClick());
             confirmButton.setOnAction(e -> handleConfirmClick());
-            pdfExportButton.setOnAction(e -> handlePDFExport());
             wikiButton.setOnAction(e -> openWiki());
 
         } catch (Exception e) {
@@ -113,6 +111,21 @@ public class CharacterCreationPage2Controller {
         }
     }
 
+    private void openWiki() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/wikiPage.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Wiki Personaggi");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Errore nel caricamento della pagina","Errore", "Impossibile aprire la pagina Wiki");
+        }
+    }
+
     private void handleConfirmClick() {
         if (!validateFields()) {
             return;
@@ -148,12 +161,6 @@ public class CharacterCreationPage2Controller {
         }
     }
 
-    private void handlePDFExport() {
-        saveCharacterData();
-        // Implementa qui la logica di esportazione PDF
-        showAlert("Esportazione PDF", "PDF generato", "Il personaggio è stato esportato in PDF");
-    }
-
     private boolean validateFields() {
         if (hitDiceField.getText().isEmpty()) {
             showAlert("Validazione", "Campo mancante", "Inserisci i dadi vita (Hit Dice)");
@@ -175,7 +182,6 @@ public class CharacterCreationPage2Controller {
         character.setHitdice(hitDiceField.getText());
         character.setInspiration(inspirationCheckBox.isSelected());
         character.setSpeed(speedSpinner.getValue());
-        character.setPortrait_url(portraitUrlField.getText());
         character.setInventory(inventoryField.getText());
     }
 
@@ -190,20 +196,6 @@ public class CharacterCreationPage2Controller {
         } catch (IOException e) {
             showAlert("Errore", "Impossibile tornare al menu", "Errore durante il caricamento del menu: " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    private void openWiki() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/statscroll/view/wikiPage.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Wiki Personaggi");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            showAlert("Errore", "Impossibile aprire la wiki", e.getMessage());
         }
     }
 

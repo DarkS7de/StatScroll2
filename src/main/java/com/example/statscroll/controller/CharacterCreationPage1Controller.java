@@ -42,8 +42,8 @@ public class CharacterCreationPage1Controller {
         configureNumericField(weightField); // Solo numeri interi per il peso
 
         // Inizializza le ChoiceBox
-        classChoiceBox.getItems().addAll("Guerriero", "Mago", "Ladro", "Chierico", "Paladino", "Druido");
-        raceChoiceBox.getItems().addAll("Umano", "Elfo", "Nano", "Halfling", "Mezzelfo", "Tiefling");
+        classChoiceBox.getItems().addAll("Fighter", "Wizard", "Rogue", "Cleric", "Paladin", "Druid");
+        raceChoiceBox.getItems().addAll("Human", "Elf", "Dwarf", "Halfling", "Half-Elf", "Tiefling");
 
         // Configurazione dello Spinner
         SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory =
@@ -148,7 +148,7 @@ public class CharacterCreationPage1Controller {
 
     private void openWiki() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/statscroll/view/wikiPage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/wikiPage.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();

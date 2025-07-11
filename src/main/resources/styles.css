@@ -100,3 +100,85 @@
 .list-view .track {
     -fx-background-color: transparent;
 }
+
+/* ScrollPane styling */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 5;
+}
+
+/* Viewport dello ScrollPane */
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Barra di scorrimento verticale */
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+}
+
+/* Barra di scorrimento orizzontale */
+.scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+}
+
+/* Thumb (la parte mobile della barra di scorrimento) */
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: rgba(142, 158, 171, 0.6);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 4;
+}
+
+/* Thumb hover */
+.scroll-pane .scroll-bar .thumb:hover {
+    -fx-background-color: rgba(142, 158, 171, 0.8);
+}
+
+/* Thumb pressed */
+.scroll-pane .scroll-bar .thumb:pressed {
+    -fx-background-color: rgba(142, 158, 171, 1);
+}
+
+/* Track (la parte fissa della barra di scorrimento) */
+.scroll-pane .scroll-bar .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+
+/* Pulsanti incremento/decremento */
+.scroll-pane .scroll-bar .increment-button,
+.scroll-pane .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+/* Freccette dei pulsanti */
+.scroll-pane .scroll-bar .increment-arrow,
+.scroll-pane .scroll-bar .decrement-arrow {
+    -fx-background-color: rgba(142, 158, 171, 0.6);
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* Corner (l'angolo tra le due barre di scorrimento) */
+.scroll-pane .corner {
+    -fx-background-color: transparent;
+}
+
+/* Stile per il contenuto testuale all'interno dello ScrollPane */
+.scroll-pane .text {
+    -fx-font-family: "Oriya MN";
+    -fx-font-size: 14px;
+    -fx-fill: #393737;
+}
+
+/* Effetto hover per lo ScrollPane */
+.scroll-pane:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 10, 0.3, 0, 2);
+}

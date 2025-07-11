@@ -88,4 +88,20 @@ public class MenuPageController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+    @FXML
+    private void openWiki() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/wikiPage.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Wiki Personaggi");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Errore nel caricamento della pagina","Errore", "Impossibile aprire la pagina Wiki");
+        }
+    }
 }

@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
+import com.example.statscroll.util.ErrorHandler;
+
 
 import java.io.IOException;
 
@@ -50,13 +52,10 @@ public class CharacterModificationPage1Controller {
     }
 
     private void initializeChoiceBoxes() {
-        classChoiceBox.setItems(FXCollections.observableArrayList(
-                "Barbaro", "Bardo", "Chierico", "Druido", "Guerriero",
-                "Ladro", "Mago", "Monaco", "Paladino", "Ranger", "Stregone", "Warlock"));
+        classChoiceBox.setItems(FXCollections.observableArrayList("Fighter", "Wizard", "Rogue", "Cleric", "Paladin", "Druid"));
 
         raceChoiceBox.setItems(FXCollections.observableArrayList(
-                "Umano", "Elfo", "Nano", "Halfling", "Mezzelfo",
-                "Mezzorco", "Tiefling", "Dragonide", "Gnomo"));
+                "Human", "Elf", "Dwarf", "Halfling", "Half-Elf", "Tiefling"));
     }
 
     private void initializeNumericFields() {
@@ -114,7 +113,6 @@ public class CharacterModificationPage1Controller {
         savePage1Data();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/characterModificationPage2.fxml"));
-            loader.setControllerFactory(clazz -> new CharacterModificationPage2Controller());
             Parent root = loader.load();
 
             CharacterModificationPage2Controller controller = loader.getController();
@@ -148,6 +146,29 @@ public class CharacterModificationPage1Controller {
         } catch (IOException e) {
             showErrorAlert("Errore nel tornare al menu", e.getMessage());
         }
+    }
+
+    @FXML
+    private void openWiki() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/wikiPage.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Wiki Personaggi");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Errore nel caricamento della pagina","Errore", "Impossibile aprire la pagina Wiki");
+        }
+    }
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
 

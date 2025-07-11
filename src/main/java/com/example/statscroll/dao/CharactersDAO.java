@@ -13,89 +13,143 @@ public class CharactersDAO {
              Statement stmt = conn.createStatement()) {
 
             stmt.execute("""
-                CREATE TABLE IF NOT EXISTS characters (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    user_id INT NOT NULL,
-                    name VARCHAR NOT NULL,
-                    char_class VARCHAR NOT NULL,
-                    level INT DEFAULT 1,
-                    race VARCHAR NOT NULL,
-                    initiative INT DEFAULT 0,
-                    speed INT DEFAULT 30,
-                    str INT DEFAULT 10,
-                    dex INT DEFAULT 10,
-                    con INT DEFAULT 10,
-                    intel INT DEFAULT 10,
-                    wis INT DEFAULT 10,
-                    cha INT DEFAULT 10,
-                    inspiration BOOLEAN DEFAULT FALSE,
-                    profbonus INT DEFAULT 2,
-                    maxhp INT DEFAULT 10,
-                    hitdice VARCHAR,
-                    age VARCHAR,
-                    eyes VARCHAR,
-                    hair VARCHAR,
-                    skin VARCHAR,
-                    height VARCHAR,
-                    weight VARCHAR,
-                    inventory TEXT,
-                    portrait_url VARCHAR
-                )
-            """);
-
+            CREATE TABLE IF NOT EXISTS characters (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                name VARCHAR NOT NULL,
+                char_class VARCHAR NOT NULL,
+                level INT DEFAULT 1,
+                race VARCHAR NOT NULL,
+                initiative INT DEFAULT 0,
+                speed INT DEFAULT 30,
+                str INT DEFAULT 10,
+                dex INT DEFAULT 10,
+                con INT DEFAULT 10,
+                intel INT DEFAULT 10,
+                wis INT DEFAULT 10,
+                cha INT DEFAULT 10,
+                inspiration BOOLEAN DEFAULT FALSE,
+                profbonus INT DEFAULT 2,
+                maxhp INT DEFAULT 10,
+                hitdice VARCHAR,
+                age VARCHAR,
+                eyes VARCHAR,
+                hair VARCHAR,
+                skin VARCHAR,
+                height VARCHAR,
+                weight VARCHAR,
+                inventory TEXT,
+                portrait_url VARCHAR
+            )
+        """);
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Errore durante la creazione della tabella characters", e);
         }
     }
 
     public void save(Characters character) {
         String sql = """
-            INSERT INTO characters (
-                user_id, name, char_class, level, race, initiative, speed,
-                str, dex, con, intel, wis, cha, inspiration, profbonus,
-                maxhp, hitdice, age, eyes, hair, skin, height, weight, 
-                inventory, portrait_url
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+        INSERT INTO characters (
+            user_id, name, char_class, level, race, initiative, speed,
+            str, dex, con, intel, wis, cha, inspiration, profbonus,
+            maxhp, hitdice, age, eyes, hair, skin, height, weight, 
+            inventory, portrait_url
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """;
 
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            setCommonParameters(ps, character);
+            // Imposta i 25 parametri
+            ps.setString(1, character.getUser_id());
+            ps.setString(2, character.getName());
+            ps.setString(3, character.getChar_class());
+            ps.setInt(4, character.getLevel());
+            ps.setString(5, character.getRace());
+            ps.setInt(6, character.getInitiative());
+            ps.setInt(7, character.getSpeed());
+            ps.setInt(8, character.getStr());
+            ps.setInt(9, character.getDex());
+            ps.setInt(10, character.getCon());
+            ps.setInt(11, character.getIntel());
+            ps.setInt(12, character.getWis());
+            ps.setInt(13, character.getCha());
+            ps.setBoolean(14, character.isInspiration());
+            ps.setInt(15, character.getProfbonus());
+            ps.setInt(16, character.getMaxhp());
+            ps.setString(17, character.getHitdice());
+            ps.setString(18, character.getAge());
+            ps.setString(19, character.getEyes());
+            ps.setString(20, character.getHair());
+            ps.setString(21, character.getSkin());
+            ps.setString(22, character.getHeight());
+            ps.setString(23, character.getWeight());
+            ps.setString(24, character.getInventory());
+            ps.setString(25, character.getPortrait_url());
+
             ps.executeUpdate();
 
-            // Ottieni l'ID generato
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     character.setId(rs.getInt(1));
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Errore durante il salvataggio del personaggio", e);
         }
     }
 
     public void update(Characters character) {
         String sql = """
-            UPDATE characters SET
-                user_id = ?, name = ?, char_class = ?, level = ?, race = ?,
-                initiative = ?, speed = ?, str = ?, dex = ?, con = ?, intel = ?,
-                wis = ?, cha = ?, inspiration = ?, profbonus = ?, maxhp = ?,
-                hitdice = ?, age = ?, eyes = ?, hair = ?, skin = ?, height = ?,
-                weight = ?, inventory = ?, portrait_url = ?
-            WHERE id = ?
-        """;
+        UPDATE characters SET
+            user_id = ?, name = ?, char_class = ?, level = ?, race = ?,
+            initiative = ?, speed = ?, str = ?, dex = ?, con = ?, intel = ?,
+            wis = ?, cha = ?, inspiration = ?, profbonus = ?, maxhp = ?,
+            hitdice = ?, age = ?, eyes = ?, hair = ?, skin = ?, height = ?,
+            weight = ?, inventory = ?, portrait_url = ?
+        WHERE id = ?
+    """;
 
         try (Connection conn = DriverManager.getConnection(url, "sa", "");
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            setCommonParameters(ps, character);
-            ps.setInt(25, character.getId());
-            ps.executeUpdate();
+            // Impostazione dei 24 parametri del SET (1-24)
+            ps.setString(1, character.getUser_id());
+            ps.setString(2, character.getName());
+            ps.setString(3, character.getChar_class());
+            ps.setInt(4, character.getLevel());
+            ps.setString(5, character.getRace());
+            ps.setInt(6, character.getInitiative());
+            ps.setInt(7, character.getSpeed());
+            ps.setInt(8, character.getStr());
+            ps.setInt(9, character.getDex());
+            ps.setInt(10, character.getCon());
+            ps.setInt(11, character.getIntel());
+            ps.setInt(12, character.getWis());
+            ps.setInt(13, character.getCha());
+            ps.setBoolean(14, character.isInspiration());
+            ps.setInt(15, character.getProfbonus());
+            ps.setInt(16, character.getMaxhp());
+            ps.setString(17, character.getHitdice());
+            ps.setString(18, character.getAge());
+            ps.setString(19, character.getEyes());
+            ps.setString(20, character.getHair());
+            ps.setString(21, character.getSkin());
+            ps.setString(22, character.getHeight());
+            ps.setString(23, character.getWeight());
+            ps.setString(24, character.getInventory());
+            ps.setString(25, character.getPortrait_url());
+            ps.setInt(26, character.getId());
 
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Aggiornamento fallito, nessuna riga modificata");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Errore durante l'aggiornamento del personaggio", e);
         }
     }
 
@@ -125,6 +179,7 @@ public class CharactersDAO {
         ps.setString(23, character.getWeight());
         ps.setString(24, character.getInventory());
         ps.setString(25, character.getPortrait_url());
+        ps.setInt(26, character.getId());
     }
 
     public Characters findById(int id) {
